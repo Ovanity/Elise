@@ -3,28 +3,42 @@
 
 {% block content %}
 <div class="container">
-  <div class="box">
+  <div class="box animated fadeIn" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
     <article class="media">
       <figure class="media-left">
-        <p class="image is-64x64">
-          <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ user.username }}">
+        <p class="image is-128x128">
+          <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ user.username }}" style="border-radius:50%; border:3px solid #D57EAC;">
         </p>
       </figure>
       <div class="media-content">
-        <h1 class="title">Les humeurs de {{ user.username }}</h1>
+        <h1 class="title" style="color:#D57EAC;">Les humeurs de {{ user.username }}</h1>
       </div>
     </article>
   </div>
 
-  <div class="box">
-    <ul>
-      {% for mood in user.moods %}
-        <li>
-          <strong>{{ mood.mood_text }}</strong> -
-          <em>{{ mood.created_at.strftime('%d/%m/%Y %H:%M') }}</em>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  {% if user.moods %}
+    {% for mood in user.moods %}
+      <div class="box animated fadeInUp" style="background-color: #FFFDF7; border-radius: 15px; margin-bottom: 1rem; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center;">
+          <figure class="image is-48x48" style="margin-right: 1rem;">
+            <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de {{ user.username }}" style="border-radius:50%; border:2px solid #D57EAC;">
+          </figure>
+          <div>
+            <strong style="color: #5D5C61;">{{ user.username }}</strong>
+            <small style="color:#B79CAC;">{{ mood.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; font-size: 1.2rem; color:#6E6D7A;">{{ mood.mood_text }}</p>
+
+        {% if session.username == user.username %}
+          <form method="POST" action="{{ url_for('delete_mood', mood_id=mood.id) }}" style="margin-top: 1rem;">
+            <button class="button is-danger is-small" type="submit">Supprimer</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p style="text-align: center; font-size: 1.2rem; color:#B79CAC;">Aucune humeur enregistrée.</p>
+  {% endif %}
 </div>
 {% endblock %}

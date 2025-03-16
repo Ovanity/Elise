@@ -2,91 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Mon Appli{% endblock %}</title>
 
-  <!-- Google Font for a cute style (Baloo 2) -->
+  <!-- Google Font (Baloo 2) -->
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Bulma CSS via CDN -->
+  <!-- Bulma CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-  <!-- Custom styles for a pastel, cute, and mobile-friendly theme with pulsing status -->
+  <!-- Styles personnalisés -->
   <style>
-    /* Use a pastel palette */
     body {
-      background-color: #FFF9F0; /* very light pastel beige */
-      color: #555;
+      background: linear-gradient(135deg, #FADCD9, #FFEFEF);
+      color: #5D5C61;
       font-family: 'Baloo 2', cursive;
       font-size: 1.2rem;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
+      position: relative;
     }
-    /* Navbar with a pastel gradient */
+
+    /* Navbar pastel animé */
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
     .navbar {
-      background: linear-gradient(45deg, #FFE0E6, #FFFAF2);
+      background: linear-gradient(45deg, #FADCD9, #FFF1F6);
       background-size: 200% 200%;
-      animation: gradientShift 15s ease infinite;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      animation: gradientShift 20s ease infinite;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
     .navbar-item, .navbar-brand {
-      color: #555;
+      color: #5D5C61;
       font-size: 1.3rem;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+      transition: transform 0.3s ease;
     }
     .navbar-item:hover {
-      background-color: rgba(255, 224, 230, 0.6);
       transform: scale(1.05);
     }
+
+    /* Footer doux */
     footer.footer {
-      background-color: #FFFAF2; /* pastel off-white */
-      color: #777;
+      background-color: #FFF1F6;
+      color: #5D5C61;
       padding: 1.5rem 0;
       font-size: 1.1rem;
     }
-    /* Full-width container with more padding for mobile */
+
     .container {
       max-width: 100%;
       padding: 1.5rem;
     }
-    /* Larger headings for a bold look */
-    .title {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #555;
-    }
-    .subtitle {
-      font-size: 1.8rem;
-      margin-bottom: 0.75rem;
-      color: #666;
-    }
-    /* Larger buttons for easier tapping with a soft border */
-    .button {
-      font-size: 1.2rem;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .button:hover {
-      transform: scale(1.05);
-    }
-    /* Pulsating animation for status elements */
-    @keyframes pulsate {
-      0% { opacity: 0.8; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.01); }
-      100% { opacity: 0.8; transform: scale(1); }
-    }
-    .pulsate {
-      animation: pulsate 6s ease-in-out infinite;
-    }
-    /* Fade-in animation for main content */
+
+    /* Animation fadeIn douce */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -94,89 +66,106 @@
     .section {
       animation: fadeIn 1s ease-out;
     }
-    /* Additional spacing adjustments on mobile */
+
+    /* Fleurs animées tombantes en fond */
+    .flower {
+      position: fixed;
+      top: -10%;
+      font-size: 2rem;
+      opacity: 0.2;
+      pointer-events: none;
+      animation: flowerFall linear infinite;
+    }
+
+    @keyframes flowerFall {
+      to { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    /* Variations pour différentes fleurs */
+    .flower:nth-child(1) { left: 10%; animation-duration: 15s; animation-delay: 0s; }
+    .flower:nth-child(2) { left: 20%; animation-duration: 18s; animation-delay: 2s; }
+    .flower:nth-child(3) { left: 30%; animation-duration: 20s; animation-delay: 4s; }
+    .flower:nth-child(4) { left: 40%; animation-duration: 16s; animation-delay: 1s; }
+    .flower:nth-child(5) { left: 50%; animation-duration: 22s; animation-delay: 3s; }
+    .flower:nth-child(6) { left: 60%; animation-duration: 17s; animation-delay: 5s; }
+    .flower:nth-child(7) { left: 70%; animation-duration: 19s; animation-delay: 6s; }
+    .flower:nth-child(8) { left: 80%; animation-duration: 14s; animation-delay: 2.5s; }
+    .flower:nth-child(9) { left: 90%; animation-duration: 21s; animation-delay: 4.5s; }
+    .flower:nth-child(10){ left: 95%; animation-duration: 23s; animation-delay: 1.5s; }
+
+    /* Adaptation pour mobile */
     @media screen and (max-width: 768px) {
-      .section {
-        padding: 2rem 1rem;
-      }
+      .section { padding: 2rem 1rem; }
+      .flower { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <!-- Éléments fleurs animées -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌷</div>
+  <div class="flower">🌹</div>
+  <div class="flower">🌼</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌷</div>
+  <div class="flower">🌹</div>
+  <div class="flower">🌼</div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="{{ url_for('index') }}">
-        MOODBOARD
-      </a>
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
+      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a>
+      <a role="button" class="navbar-burger" data-target="navbarMenu">
+        <span></span><span></span><span></span>
       </a>
     </div>
     <div id="navbarMenu" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="{{ url_for('index') }}">
-          Accueil
-        </a>
         {% if session.username %}
-          <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">
-            Mon Profil
-          </a>
-          <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">
-            Mes Humeurs
-          </a>
+          <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
+          <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
         {% endif %}
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
           {% if session.username %}
-            <div>Connecté en tant que {{ session.username }}</div>
-            <a class="button is-light" href="{{ url_for('logout') }}">
-              Déconnexion
-            </a>
+            <div>🌸 Connecté : {{ session.username }}</div>
+            <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
           {% else %}
-            <a class="button is-light" href="{{ url_for('login') }}">
-              Connexion
-            </a>
-            <a class="button is-light" href="{{ url_for('register') }}">
-              Inscription
-            </a>
+            <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
+            <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
           {% endif %}
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Main Content Section -->
+  <!-- Section principale -->
   <section class="section">
     <div class="container">
       {% block content %}{% endblock %}
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Pied de page -->
   <footer class="footer">
     <div class="content has-text-centered">
       <p>Fait avec ♥ par Martin. 2025</p>
     </div>
   </footer>
 
-  <!-- Script to activat  e the burger menu on mobile -->
+  <!-- Script Navbar Burger -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-      if ($navbarBurgers.length > 0) {
-        $navbarBurgers.forEach(el => {
-          el.addEventListener('click', () => {
-            const target = el.dataset.target;
-            const $target = document.getElementById(target);
-            el.classList.toggle('is-active');
-            $target.classList.toggle('is-active');
-          });
-        });
-      }
+      document.querySelectorAll('.navbar-burger').forEach(el => {
+        el.onclick = () => {
+          const menu = document.getElementById(el.dataset.target);
+          el.classList.toggle('is-active');
+          menu.classList.toggle('is-active');
+        };
+      });
     });
   </script>
 </body>

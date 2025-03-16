@@ -2,29 +2,31 @@
 {% block title %}Inscription{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h1 class="title">Inscription</h1>
-  <form method="POST">
-    <div class="field">
-      <label class="label">Nom d'utilisateur</label>
-      <div class="control">
-        <input class="input" type="text" name="username" required>
+<div class="container animated fadeIn" style="max-width:500px; margin:auto; padding:1rem; text-align:center;">
+  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h1 class="title" style="color:#D57EAC; margin-bottom: 1.5rem;">Inscription</h1>
+    <form method="POST">
+      <div class="field">
+        <label class="label" style="color:#8A6878;">Nom d'utilisateur</label>
+        <div class="control">
+          <input class="input" type="text" name="username" required style="border-radius:8px;">
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Mot de passe</label>
-      <div class="control">
-        <input class="input" type="password" name="password" required>
+      <div class="field" style="margin-top:1rem;">
+        <label class="label" style="color:#8A6878;">Mot de passe</label>
+        <div class="control">
+          <input class="input" type="password" name="password" required style="border-radius:8px;">
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link" type="submit">S'inscrire</button>
+      <div class="field" style="margin-top: 1.5rem;">
+        <div class="control">
+          <button class="button is-link" type="submit" style="background-color:#D57EAC; border:none;">S'inscrire</button>
+        </div>
       </div>
-    </div>
-  </form>
-  <p class="has-text-centered">
-    Déjà inscrit ? <a href="{{ url_for('login') }}">Se connecter</a>.
-  </p>
+    </form>
+    <p class="has-text-centered" style="margin-top: 1rem; color:#6E6D7A;">
+      Déjà inscrit ? <a href="{{ url_for('login') }}" style="color:#D57EAC;">Se connecter</a>.
+    </p>
+  </div>
 </div>
 {% endblock %}

@@ -2,46 +2,79 @@
 {% block title %}Présentation{% endblock %}
 
 {% block content %}
-<section class="section" style="padding: 0.5rem 0;">
-  <div class="container" style="max-width: 100%; padding: 0 1rem; margin: 0 auto;">
-    <div class="box" style="text-align: center; padding: 1rem; margin: 0; background-color: #fff8f9; border-radius: 15px; height: 80vh; overflow-y: auto;">
+<div class="container animated fadeIn" style="max-width:650px; padding:1rem; text-align:center;">
 
-      {% if session.username %}
-        <h1 class="title" style="color: #ff91a4; margin-bottom: 1rem;">🌸 Heureux de te revoir, {{ session.username }} ! 🌸</h1>
-        <p class="subtitle" style="font-size: 1.3rem; margin-bottom: 1rem;">
-          Tu es connectée à ton espace personnel. Ici, tu peux consulter tes anciennes humeurs, en ajouter de nouvelles, choisir une photo de profil que tu aimes, et surtout indiquer aux autres si tu souhaites discuter ou être tranquille.
-        </p>
-      {% else %}
-        <h1 class="title" style="color: #ff91a4; margin-bottom: 1rem;">🌼 Bienvenue sur MoodBoard 🌼</h1>
-        <p class="subtitle" style="font-size: 1.3rem; margin-bottom: 1rem;">
-          MoodBoard est une application douce et apaisante, spécialement conçue pour partager et comprendre tes émotions au quotidien. Ici, tu pourras noter comment tu te sens, choisir une jolie photo de profil et indiquer si tu es disponible pour discuter ou si tu préfères rester tranquille.
-        </p>
+  <div class="box" style="background-color:rgba(255,250,255,0.95); border-radius:20px; padding:2rem; box-shadow:0 4px 12px rgba(0,0,0,0.05); overflow-y:auto;">
 
-        <p style="text-align: left; margin: 0 auto; max-width: 700px; font-size: 1.2rem; margin-bottom: 1rem;">
-          <strong>Inscris-toi :</strong> Clique sur le bouton « Inscription » en haut à droite pour créer ton compte. Choisis un nom d’utilisateur simple et un mot de passe facile à retenir.
-        </p>
-        <p style="text-align: left; margin: 0 auto; max-width: 700px; font-size: 1.2rem; margin-bottom: 1rem;">
-          <strong>Choisis ta photo :</strong> Une fois inscrite, sélectionne une image qui te représente et que tu aimes. Cette photo sera affichée dans ton profil.
-        </p>
-        <p style="text-align: left; margin: 0 auto; max-width: 700px; font-size: 1.2rem; margin-bottom: 1rem;">
-          <strong>Connecte-toi :</strong> Clique sur « Connexion » pour accéder à ton espace personnel avec les identifiants que tu as créés.
-        </p>
-        <p style="text-align: left; margin: 0 auto; max-width: 700px; font-size: 1.2rem; margin-bottom: 1rem;">
-          <strong>Que peux-tu faire ?</strong> Une fois connectée, tu pourras :
-          <br>- Partager ton humeur du moment pour mieux comprendre tes émotions.
-          <br>- Définir ton statut pour indiquer si tu es disponible pour discuter ou si tu préfères être seule. Ce statut s’affichera avec une douce animation pulsante.
-          <br>- Découvrir des ressources adaptées : une playlist relaxante si tu es stressée, un exercice de respiration en cas d'anxiété, ou une vidéo apaisante pour te détendre.
-        </p>
-        <p class="subtitle" style="margin-top: 1.5rem; font-size: 1.3rem;">
-          Prends ton temps et profite de cet espace fait pour toi. Quand tu es prête, clique sur « Entrer » ci-dessous pour commencer 🌸.
-        </p>
-      {% endif %}
+    {% if session.username %}
+      <h1 class="title" style="color:#D57EAC; margin-bottom:1rem;">
+        🌸 Heureux de te revoir, {{ session.username }} ! 🌸
+      </h1>
+      <p class="subtitle" style="color:#8A6878; font-size:1.3rem; margin-bottom:1rem;">
+        Tu es connectée à ton espace personnel. Ici, tu peux consulter tes anciennes humeurs, en ajouter de nouvelles, choisir une jolie photo de profil, et indiquer aux autres si tu souhaites discuter ou être tranquille.
+      </p>
+    {% else %}
+      <h1 class="title" style="color:#D57EAC; margin-bottom:1rem;">
+        🌼 Bienvenue sur MoodBoard 🌼
+      </h1>
+      <p class="subtitle" style="color:#8A6878; font-size:1.3rem; margin-bottom:1rem;">
+        MoodBoard est une application douce et apaisante. Ici, tu pourras noter comment tu te sens, et indiquer si tu es disponible pour discuter ou si tu préfères rester tranquille. Tu pourras aussi poster des idées.
+      </p>
 
-      <a class="button is-primary is-large" href="{{ url_for('index') }}" style="margin-top: 1rem; background-color: #ff91a4; border-color: transparent; font-size: 1.4rem;">
-        🌸 Entrer 🌸
-      </a>
+      <div style="text-align:left; margin:auto; max-width:600px; color:#7D6E83; font-size:1.2rem;">
+        <p><strong>🌟 Inscris-toi :</strong> Clique sur « Inscription » en haut à droite pour créer ton compte avec un nom simple et un mot de passe facile à retenir.</p>
 
-    </div>
+        <p><strong>🖼️ Choisis ta photo :</strong> Une fois inscrite, sélectionne une image qui te ressemble et te rend heureuse.</p>
+
+        <p><strong>🔑 Connecte-toi :</strong> Accède à ton espace personnel en cliquant sur « Connexion » avec tes identifiants.</p>
+
+        <p><strong>💖 Que peux-tu faire ?</strong> Une fois connectée, tu pourras :
+          <ul style="margin-top:0.5rem; list-style:none;">
+            <li>✨ Partager ton humeur du moment pour mieux comprendre tes émotions.</li>
+            <li>🌈 Définir ton statut, disponible ou tranquille, avec une jolie animation pulsante.</li>
+            <li>🎵 Découvrir des ressources adaptées : playlist relaxante, respiration guidée, ou vidéo apaisante.</li>
+            <li>💡 Utiliser la boîte à idées, des suggestions, des messages, des musiques...</li>
+
+          </ul>
+        </p>
+      </div>
+
+      <p class="subtitle" style="margin-top:1.5rem; color:#8A6878; font-size:1.3rem;">
+        Prends ton temps et profite de cet espace fait pour toi. Quand tu es prête, clique sur « Entrer » ci-dessous pour commencer 🌸.
+      </p>
+    {% endif %}
+
+    <a class="button is-large animated bounce" href="{{ url_for('index') }}" style="margin-top:1.5rem; background-color:#FFAAA5; color:#fff; border:none;">
+      🌸 Entrer 🌸
+    </a>
+
   </div>
-</section>
+
+
+<style>
+  /* Animation fadeIn douce pour la page entière */
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .animated.fadeIn {
+    animation:fadeIn 1s ease-out;
+  }
+
+  /* Animation légère bounce pour le bouton principal */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .animated.bounce {
+    animation: bounce 3s ease-in-out infinite;
+  }
+
+  /* Adaptation au format mobile */
+  @media (max-width:768px){
+    .title { font-size:2rem; }
+    .subtitle, p, li { font-size:1.2rem; }
+    .button { padding:0.8rem 1.2rem; font-size:1.1rem; }
+  }
+</style>
 {% endblock %}

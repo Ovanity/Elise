@@ -2,46 +2,89 @@
 {% block title %}Profil de {{ username }}{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h1 class="title">Profil de {{ username }}</h1>
+<div class="container animated fadeIn" style="max-width:600px; margin:auto; text-align:center; padding:1rem;">
 
-  {% if session.username == username %}
-    <a class="button is-link" href="{{ url_for('choose_profile_pic') }}">Changer la photo de profil</a>
-    <a class="button is-info" href="{{ url_for('add_mood') }}">Ajouter une humeur</a>
-  {% endif %}
+  <h1 class="title" style="color:#D57EAC; margin-bottom:1rem;">🌸 Profil de {{ username }} 🌸</h1>
 
-  <!-- Display the user's profile picture -->
-  <figure class="image is-128x128" style="margin-bottom: 1rem;">
-    <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ username }}">
+  <!-- Photo de profil -->
+  <figure class="image is-128x128" style="margin: 1rem auto;">
+    <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="{{ username }}" style="border-radius:50%; border:3px solid #D57EAC;">
   </figure>
 
-  <p class="subtitle">Humeur actuelle : <strong>{{ mood }}</strong></p>
-  <p class="subtitle">Disponibilité : <strong>{{ user.availability|capitalize }}</strong></p>
+  <!-- Humeur actuelle et disponibilité -->
+  <div class="box" style="background-color:rgba(255,250,255,0.9); border-radius:15px; margin-top:1rem;">
+    <p class="subtitle" style="color:#8A6878;">
+      <strong>✨ Humeur actuelle :</strong> {{ mood }}
+    </p>
+    <p class="subtitle" style="color:#8A6878;">
+      <strong>🌟 Disponibilité :</strong> {{ user.availability|capitalize }}
+    </p>
+  </div>
 
   {% if session.username == username %}
-    <!-- Buttons to update availability -->
-    <form method="POST" action="{{ url_for('update_availability') }}">
-      <div class="field is-grouped">
-        <div class="control">
-          <button name="availability" value="Disponible" class="button is-success" type="submit">
-            Disponible pour discuter
-          </button>
-        </div>
-        <div class="control">
-          <button name="availability" value="Seul(e)" class="button is-danger" type="submit">
-            Préfère être seul(e)
-          </button>
-        </div>
+    <!-- Actions utilisateur (changer photo et ajouter humeur) -->
+    <div class="buttons is-centered" style="margin-top:1rem;">
+      <a class="button" style="background-color:#B5EAD7; color:#5D5C61;" href="{{ url_for('choose_profile_pic') }}">
+        🖼️ Changer la photo
+      </a>
+      <a class="button" style="background-color:#AEC6CF; color:#5D5C61;" href="{{ url_for('add_mood') }}">
+        ✏️ Ajouter une humeur
+      </a>
+    </div>
+
+    <!-- Formulaire mise à jour disponibilité -->
+    <form method="POST" action="{{ url_for('update_availability') }}" style="margin-top:1rem;">
+      <div class="field is-grouped is-grouped-centered">
+        <button name="availability" value="Disponible" class="button" type="submit" style="background-color:#D57EAC; color:#fff;">
+          😊 Disponible pour discuter
+        </button>
+        <button name="availability" value="Seul(e)" class="button" type="submit" style="background-color:#FFAAA5; color:#fff;">
+          😔 Préfère être seul(e)
+        </button>
       </div>
     </form>
   {% else %}
-    <p>
-      Vous n'êtes pas connecté en tant que {{ username }}.
-      <a href="{{ url_for('login') }}">Connexion</a>
+    <p style="color:#8A6878; margin-top:1rem;">
+      🔒 Vous n'êtes pas connecté en tant que {{ username }}.<br>
+      <a href="{{ url_for('login') }}" style="color:#D57EAC;">Connexion</a>
     </p>
   {% endif %}
 
-  <!-- Button to view mood history, always displayed -->
-  <a class="button is-primary" href="{{ url_for('user_moods', username=username) }}">Historique des émotions</a>
+  <!-- Historique des émotions -->
+  <div style="margin-top:2rem;">
+    <a class="button" style="background-color:#FFD3B6; color:#5D5C61;" href="{{ url_for('user_moods', username=username) }}">
+      📅 Voir l'historique des émotions
+    </a>
+  </div>
+
+  <!-- Petit guide explicatif discret -->
+  <div class="box" style="background-color:rgba(255,239,250,0.8); border-radius:12px; color:#8A6878; margin-top:2rem; padding:1rem; font-size:0.9rem;">
+    <p><strong>🌷 Petit guide du profil :</strong></p>
+    <ul style="margin-top:0.5rem; text-align:left; display:inline-block;">
+      <li><strong>🖼️ Photo :</strong> Personnalise ton profil avec une jolie image.</li>
+      <li><strong>✨ Humeur :</strong> Indique comment tu te sens aujourd'hui.</li>
+      <li><strong>🌟 Disponibilité :</strong> Choisis ton statut pour informer tes amis.</li>
+      <li><strong>📅 Historique :</strong> Retrouve toutes tes humeurs précédentes.</li>
+    </ul>
+  </div>
 </div>
+
+<style>
+  /* Animation fadeIn douce */
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .animated.fadeIn {
+    animation: fadeIn 1s ease-out;
+  }
+
+  /* Styles spécifiques pour mobile */
+  @media (max-width:768px){
+    .title { font-size:2rem; }
+    .subtitle { font-size:1.3rem; }
+    .button { padding:0.8rem; font-size:1rem; }
+  }
+</style>
+
 {% endblock %}

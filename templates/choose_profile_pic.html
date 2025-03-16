@@ -2,25 +2,29 @@
 {% block title %}Choisir sa photo de profil{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h1 class="title">Choisir sa photo de profil</h1>
-  <form method="POST">
-    <div class="field">
-      <label class="label">Sélectionnez votre image :</label>
-      <div class="control">
-        {% for img in images %}
-          <label class="radio">
-            <input type="radio" name="profile_pic" value="{{ img }}">
-            <img src="{{ url_for('static', filename='images/' ~ img) }}" alt="{{ img }}" style="width: 64px;">
-          </label>
-        {% endfor %}
+<div class="container animated fadeIn" style="max-width:500px; margin:auto; padding:1rem; text-align:center;">
+  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h1 class="title" style="color:#D57EAC; margin-bottom:1.5rem;">Choisir sa photo de profil</h1>
+    <form method="POST">
+      <div class="field" style="margin-bottom: 1.5rem;">
+        <label class="label" style="color:#8A6878;">Sélectionnez votre image :</label>
+        <div class="control">
+          {% for img in images %}
+            <label class="radio" style="margin-right: 0.5rem;">
+              <input type="radio" name="profile_pic" value="{{ img }}">
+              <img src="{{ url_for('static', filename='images/' ~ img) }}" alt="{{ img }}" style="width: 64px; border-radius: 8px;">
+            </label>
+          {% endfor %}
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link" type="submit">Valider</button>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link" type="submit" style="background-color:#D57EAC; border:none; color:#fff;">
+            Valider
+          </button>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 {% endblock %}

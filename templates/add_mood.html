@@ -2,20 +2,24 @@
 {% block title %}Ajouter une humeur{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h1 class="title">Ajouter une humeur</h1>
-  <form method="POST">
-    <div class="field">
-      <label class="label">Mon humeur du moment :</label>
-      <div class="control">
-        <input class="input" type="text" name="mood_text" required>
+<div class="container animated fadeIn" style="max-width:500px; margin:auto; padding:1rem; text-align:center;">
+  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h1 class="title" style="color:#D57EAC; margin-bottom: 1.5rem;">Ajouter une humeur</h1>
+    <form method="POST">
+      <div class="field">
+        <label class="label" style="color:#8A6878;">Mon humeur du moment :</label>
+        <div class="control">
+          <input class="input" type="text" name="mood_text" required style="border-radius:8px;">
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link" type="submit">Valider</button>
+      <div class="field" style="margin-top: 1.5rem;">
+        <div class="control">
+          <button class="button is-link" type="submit" style="background-color:#D57EAC; border:none; color:#fff;">
+            Valider
+          </button>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 {% endblock %}

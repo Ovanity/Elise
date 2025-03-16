@@ -25,7 +25,14 @@ class User(db.Model):
     moods = db.relationship('Mood', backref='user', lazy=True, order_by="Mood.created_at.desc()")
     profile_pic = db.Column(db.String(200), default='picture1.png')
     availability = db.Column(db.String(20), default="Pas de statut")
+    ideas = db.relationship('Idea', backref='author', lazy=True)
 
+
+class Idea(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    idea_text = db.Column(db.String(500), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Mood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +61,23 @@ def choose_profile_pic():
         return redirect(url_for('user_profile', username=current_user.username))
 
     return render_template('choose_profile_pic.html', images=images)
+
+
+@app.route('/add_idea', methods=['GET', 'POST'])
+def add_idea():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    current_user = User.query.filter_by(username=session['username']).first()
+
+    if request.method == 'POST':
+        idea_text = request.form.get('idea_text')
+        new_idea = Idea(idea_text=idea_text, user_id=current_user.id)
+        db.session.add(new_idea)
+        db.session.commit()
+        return redirect(url_for('index'))
+
+    return render_template("add_idea.html")
 
 
 @app.route('/update_availability', methods=['POST'])
@@ -161,8 +185,10 @@ def index():
     # Récupérer la liste des utilisateurs
     users = User.query.all()
 
+    ideas = Idea.query.order_by(Idea.created_at.desc()).all()
+
     # Retourner la réponse via le template index.html
-    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences)
+    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences, ideas=ideas)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -258,7 +284,7 @@ def user_profile(username):
         else:
             return "Action non autorisée."
 
-    current_mood = user.moods[0].mood_text if user.moods else "No mood set"
+    current_mood = user.moods[0].mood_text if user.moods else "Pas d'humeur pour le moment."
     return render_template('user_profile.html', username=username, mood=current_mood, user=user)
 
 
@@ -269,6 +295,38 @@ def user_moods(username):
     """
     user = User.query.filter_by(username=username).first_or_404()
     return render_template('user_moods.html', user=user)
+
+@app.route('/delete_mood/<int:mood_id>', methods=['POST'])
+def delete_mood(mood_id):
+    # Récupérer l'humeur à supprimer
+    mood = Mood.query.get_or_404(mood_id)
+    # Vérifier que l'utilisateur connecté est bien l'auteur de l'humeur
+    if 'username' not in session or session['username'] != mood.user.username:
+        return "Action non autorisée", 403
+    db.session.delete(mood)
+    db.session.commit()
+    return redirect(url_for('user_profile', username=mood.user.username))
+
+
+@app.route('/delete_idea/<int:idea_id>', methods=['POST'])
+def delete_idea(idea_id):
+    # Check if the user is logged in
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    # Retrieve the idea by its id or return 404 if not found
+    idea = Idea.query.get_or_404(idea_id)
+
+    # Verify that the current user is the author of the idea
+    if session['username'] != idea.author.username:
+        return "Action non autorisée", 403
+
+    # Delete the idea and commit the change to the database
+    db.session.delete(idea)
+    db.session.commit()
+
+    # Redirect to the index page (or to a page showing ideas)
+    return redirect(url_for('index'))
 
 
 ############################################

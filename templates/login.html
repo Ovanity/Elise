@@ -1,24 +1,30 @@
 {% extends "layout.html" %}
 {% block title %}Connexion{% endblock %}
 {% block content %}
-  <h1 class="title">Connexion</h1>
-  <form method="POST">
-    <div class="field">
-      <label class="label">Nom d'utilisateur</label>
-      <div class="control">
-        <input class="input" type="text" name="username" required>
+<div class="container animated fadeIn" style="max-width:500px; margin:auto; padding:1rem; text-align:center;">
+  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h1 class="title" style="color:#D57EAC; margin-bottom: 1.5rem;">Connexion</h1>
+    <form method="POST">
+      <div class="field">
+        <label class="label" style="color:#8A6878;">Nom d'utilisateur</label>
+        <div class="control">
+          <input class="input" type="text" name="username" required style="border-radius:8px;">
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Mot de passe</label>
-      <div class="control">
-        <input class="input" type="password" name="password" required>
+      <div class="field" style="margin-top:1rem;">
+        <label class="label" style="color:#8A6878;">Mot de passe</label>
+        <div class="control">
+          <input class="input" type="password" name="password" required style="border-radius:8px;">
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link" type="submit">Se connecter</button>
+      <div class="field" style="margin-top: 1.5rem;">
+        <div class="control">
+          <button class="button is-link" type="submit" style="background-color:#D57EAC; border:none; color:#fff;">
+            Se connecter
+          </button>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
+</div>
 {% endblock %}

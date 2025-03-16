@@ -2,83 +2,135 @@
 {% block title %}Accueil - Humeurs{% endblock %}
 {% block content %}
 
-  <!-- Bloc du mot du jour -->
-  <div class="box" style="background-color: #f7f3e9; border-radius: 10px; text-align: center; margin-bottom: 2rem; padding: 1rem;">
-    <h1 class="title" style="font-weight: bold; margin-bottom: 0.5rem;">Expression du jour</h1>
-    <p class="is-italic" style="font-size: 1.2rem;">
-      <strong>{{ word }}</strong>
-    </p>
-    {% if definition_sentences %}
-      <ul style="text-align: left; display: inline-block; margin-top: 1rem;">
-        {% for phrase in definition_sentences %}
-          <li style="margin-bottom: 0.5rem;">{{ phrase }}.</li>
-        {% endfor %}
-      </ul>
+<!-- Expression du jour -->
+<div class="box has-text-centered animated fadeIn" style="background-color: rgba(255, 240, 245, 0.9); border-radius: 15px; margin-bottom: 2rem; padding: 2rem;">
+  <h1 class="title" style="color:#D57EAC;">🌸 Expression du jour 🌸</h1>
+  <p class="is-italic" style="font-size: 1.6rem; color: #8A6878;">
+    <strong>{{ word }}</strong>
+  </p>
+  {% if definition_sentences %}
+    <ul style="text-align: left; display: inline-block; margin-top: 1.5rem; color: #5D5C61;">
+      {% for phrase in definition_sentences %}
+        <li style="margin-bottom: 0.6rem;">{{ phrase }}.</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p style="font-size: 1.2rem; margin-top: 1rem; color: #B79CAC;">Aucune définition trouvée.</p>
+  {% endif %}
+</div>
+
+<!-- Boutons émotionnels -->
+<div class="columns is-mobile is-multiline animated fadeInUp" style="margin-bottom: 3rem;">
+  <div class="column is-full-mobile is-one-third-tablet">
+    <a class="button is-warning is-fullwidth" style="background-color:#FFD3B6; color:#5D5C61;"href="https://www.youtube.com/watch?v=PTFHxGMWhrU&list=PLj5ADQNom7b90sCqUXgjZB8lFJ4TDv-LN">😰 Stress/Bad Mood – Playlist Drôle</a>
+  </div>
+  <div class="column is-full-mobile is-one-third-tablet">
+    <a class="button is-info is-fullwidth" style="background-color:#AEC6CF; color:#5D5C61;" href="https://www.youtube.com/watch?v=l4fQ0GA1oOI">
+      😓 Anxiété/Angoisse – Relaxation d'Urgence
+    </a>
+  </div>
+  <div class="column is-full-mobile is-one-third-tablet">
+    <a class="button is-success is-fullwidth" style="background-color:#B5EAD7; color:#5D5C61;" href="https://www.youtube.com/watch?v=3oLtx7xVGRo">
+      😌 Détente – 432hz
+    </a>
+  </div>
+</div>
+
+<!-- Utilisateurs -->
+<h1 class="title animated fadeInLeft" style="color: #D57EAC; margin-bottom:1.5rem;">🌟 Humeurs du moment 🌟</h1>
+{% for user in users %}
+  <div class="box user-box animated fadeInUp" style="background-color: rgba(255, 253, 250, 0.95); border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(213, 126, 172, 0.15);">
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-64x64">
+          <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de {{ user.username }}" style="border-radius:50%; border:2px solid #D57EAC;">
+        </p>
+      </figure>
+      <div class="media-content">
+        <div class="content">
+          <h2 class="subtitle">
+            <a href="{{ url_for('user_profile', username=user.username) }}" style="color: #8A6878;">{{ user.username }}</a>
+          </h2>
+          {% if user.moods %}
+            <p style="color: #5D5C61;">
+              Dernière humeur : <strong>{{ user.moods[0].mood_text }}</strong>
+              <em style="color:#B79CAC;">({{ user.moods[0].created_at.strftime('%d/%m/%Y %H:%M') }})</em>
+            </p>
+          {% else %}
+            <p style="color: #B79CAC;">Aucune humeur enregistrée.</p>
+          {% endif %}
+          {% if user.availability == 'Disponible' %}
+            <p class="pulsate">✨ Disponible <span>😊</span></p>
+          {% elif user.availability == 'Seul(e)' %}
+            <p class="pulsate">🌙 Préfère être seul(e) <span>😔</span></p>
+          {% else %}
+            <p>Statut : Inconnu</p>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  </div>
+{% endfor %}
+
+<!-- Boîte à idées musicales -->
+<div class="container">
+  <div class="box animated fadeInRight" style="background-color: rgba(255, 239, 250, 0.9); border-radius: 15px; padding: 2rem; margin-top:2rem;">
+    <h1 class="title" style="color:#D57EAC;">💡 Boîte à idées 💡</h1>
+    <p class="subtitle" style="color:#8A6878;">Partage une musique, une vidéo, une suggestion ou un petit mot ✨</p>
+    {% if session.username %}
+      <form method="POST" action="{{ url_for('add_idea') }}">
+        <div class="field">
+          <textarea class="textarea" name="idea_text" placeholder="Un lien ou ta pensée du jour, Exemple : 'Une playlist relaxante'" required style="border-radius:12px;"></textarea>
+        </div>
+        <button class="button is-success" type="submit" style="background-color:#D57EAC; color:#fff;">Poster mon idée 💌</button>
+      </form>
     {% else %}
-      <p style="font-size: 1.2rem; margin-top: 1rem;">Aucune définition trouvée.</p>
+      <p style="font-size: 1.1rem; color:#8A6878;">🔒 <a href="{{ url_for('login') }}" style="color:#D57EAC;">Connecte-toi</a> pour partager ton idée.</p>
+    {% endif %}
+
+    {% if ideas %}
+      <div style="margin-top: 2rem;">
+        {% for idea in ideas %}
+          <div class="box animated fadeInUp" style="background-color: rgba(255,255,255,0.8); border-radius: 12px; box-shadow: 0 2px 8px rgba(213, 126, 172, 0.15); margin-bottom: 1rem; padding: 1rem;">
+            <article class="media">
+              <figure class="media-left">
+                <p class="image is-48x48">
+                  <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}" alt="{{ idea.author.username }}" style="border-radius:50%; border:2px solid #D57EAC;">
+                </p>
+              </figure>
+              <div class="media-content">
+                <div class="content" style="color: #5D5C61;">
+                  <strong>{{ idea.author.username }}</strong>
+                  <small style="color:#B79CAC;">{{ idea.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                  <p>{{ idea.idea_text }}</p>
+                </div>
+              </div>
+              {% if session.username == idea.author.username %}
+                <div class="media-right">
+                  <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.id) }}">
+                    <button class="button is-danger is-small" type="submit" style="margin-top:0.5rem;">Supprimer</button>
+                  </form>
+                </div>
+              {% endif %}
+            </article>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="font-size: 1.1rem; color:#B79CAC; margin-top: 1rem;">Sois la première à partager une idée ! 🌷</p>
     {% endif %}
   </div>
+</div>
 
-  <!-- Boutons de suggestions d'émotions pour mobile -->
-  <div class="columns is-mobile is-multiline" style="margin-bottom: 2rem;">
-    <div class="column is-full-mobile is-one-third-tablet">
-      <a class="button is-warning is-fullwidth" href="#">
-        😰 Stress – Playlist
-      </a>
-    </div>
-    <div class="column is-full-mobile is-one-third-tablet">
-      <a class="button is-info is-fullwidth" href="#">
-        😓 Anxiété – Respiration
-      </a>
-    </div>
-    <div class="column is-full-mobile is-one-third-tablet">
-      <a class="button is-success is-fullwidth" href="https://www.youtube.com/watch?v=3oLtx7xVGRo">
-        😌 Détente – 432hz Video
-      </a>
-    </div>
-  </div>
-
-  <h1 class="title">Utilisateurs et leurs dernières humeurs</h1>
-  {% for user in users %}
-    <div class="box">
-      <article class="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ user.username }}">
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <h2 class="subtitle">
-              <a href="{{ url_for('user_profile', username=user.username) }}">{{ user.username }}</a>
-            </h2>
-            {% if user.moods %}
-              <p>
-                Dernière humeur : <strong>{{ user.moods[0].mood_text }}</strong> -
-                <em>{{ user.moods[0].created_at.strftime('%d/%m/%Y %H:%M') }}</em>
-              </p>
-            {% else %}
-              <p>Aucune humeur enregistrée.</p>
-            {% endif %}
-            {% if user.availability == 'Disponible' %}
-              <p class="pulsate">Statut : Disponible <span>🙂</span></p>
-            {% elif user.availability == 'Seul(e)' %}
-              <p class="pulsate">Statut : Préfère être seul(e) <span>😐</span></p>
-            {% else %}
-              <p>Statut : Inconnu</p>
-            {% endif %}
-          </div>
-        </div>
-      </article>
-    </div>
-  {% endfor %}
-
-  <!-- Bloc explicatif discret en bas de page -->
-  <div class="box" style="background-color: #f0f0f0; border-radius: 8px; font-size: 0.9rem; color: #555; margin-top: 2rem; padding: 1rem;">
-    <p><strong>Explication :</strong></p>
-    <p><em>Expression du jour :</em> Un mot aléatoire en français, sélectionné chaque jour, avec une courte définition pour enrichir notre vocabulaire.</p>
-    <p><em>Boutons d'émotions :</em> Les boutons permettent d'accéder à des ressources adaptées à notre état émotionnel (playlist pour le stress, exercice de respiration pour l'anxiété, vidéo relaxante pour la détente).</p>
-    <p><em>Liste des utilisateurs :</em> Chaque utilisateur est affiché avec sa photo de profil, sa dernière humeur et son statut (indiquant s'il est disponible pour discuter ou s'il préfère être laissé seul(e)).</p>
-  </div>
+<!-- Petit guide -->
+<div class="box animated fadeInUp" style="background-color: rgba(255,250,255,0.9); border-radius: 12px; color: #8A6878; margin-top: 2rem; padding: 1.5rem;">
+  <p><strong>🌷 Petit guide :</strong></p>
+  <ul style="margin-top:0.5rem;">
+    <li>📖 <strong>Expression du jour :</strong> Découvre chaque jour une jolie expression française pour enrichir notre vocabulaire.</li>
+    <li>💖 <strong>Boutons émotionnels :</strong> Ressources rapides adaptées à ton humeur.</li>
+    <li>👥 <strong>Humeurs :</strong> Découvre comment se sentent les autres et si ils sont disponibles mentalement ou non. Tu peux aussi cliquer sur leur pseudo pour accéder à leur profil.</li>
+    <li>💡 <strong>Boîte à idées :</strong> Partage ce qui te tient à cœur. Tu peux supprimer tes propres idées.</li>
+  </ul>
+</div>
 
 {% endblock %}
