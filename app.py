@@ -1,12 +1,15 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MaCleSuperSecrete'
 # Base de données SQLite dans un fichier moods.db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///moods.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///moods.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
