@@ -12,35 +12,46 @@
   <!-- Bulma CSS via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-  <!-- Custom styles for a pastel, cute, and mobile-friendly theme -->
+  <!-- Custom styles for a pastel, cute, and mobile-friendly theme with pulsing status -->
   <style>
-    /* Use the cute font for the whole app */
+    /* Use a pastel palette */
     body {
-      background-color: #f5f7fa; /* very light pastel blue-gray */
+      background-color: #FFF9F0; /* very light pastel beige */
+      color: #555;
       font-family: 'Baloo 2', cursive;
-      font-size: 1.2rem; /* increased base font size for readability */
+      font-size: 1.2rem;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
-    /* Navbar with a subtle pastel gradient */
+    /* Navbar with a pastel gradient */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     .navbar {
-      background: linear-gradient(45deg, #ffdde1, #e4f0f7);
+      background: linear-gradient(45deg, #FFE0E6, #FFFAF2);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .navbar-item, .navbar-brand {
-      color: #333;
-      font-size: 1.3rem; /* larger navbar text */
+      color: #555;
+      font-size: 1.3rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
     .navbar-item:hover {
-      background-color: rgba(255, 222, 225, 0.8);
+      background-color: rgba(255, 224, 230, 0.6);
+      transform: scale(1.05);
     }
     footer.footer {
-      background-color: #f0e6f6; /* pastel lavender */
-      color: #555;
+      background-color: #FFFAF2; /* pastel off-white */
+      color: #777;
       padding: 1.5rem 0;
       font-size: 1.1rem;
     }
-    /* Full-width container with more padding for mobile devices */
+    /* Full-width container with more padding for mobile */
     .container {
       max-width: 100%;
       padding: 1.5rem;
@@ -49,18 +60,41 @@
     .title {
       font-size: 2.5rem;
       margin-bottom: 1rem;
+      color: #555;
     }
     .subtitle {
       font-size: 1.8rem;
       margin-bottom: 0.75rem;
+      color: #666;
     }
-    /* Increase button size for easier tapping */
+    /* Larger buttons for easier tapping with a soft border */
     .button {
       font-size: 1.2rem;
       padding: 1rem 1.5rem;
       border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
-    /* Additional spacing for mobile */
+    .button:hover {
+      transform: scale(1.05);
+    }
+    /* Pulsating animation for status elements */
+    @keyframes pulsate {
+      0% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.01); }
+      100% { opacity: 0.8; transform: scale(1); }
+    }
+    .pulsate {
+      animation: pulsate 10s ease-in-out infinite;
+    }
+    /* Fade-in animation for main content */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section {
+      animation: fadeIn 1s ease-out;
+    }
+    /* Additional spacing adjustments on mobile */
     @media screen and (max-width: 768px) {
       .section {
         padding: 2rem 1rem;

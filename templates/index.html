@@ -43,6 +43,13 @@
             {% else %}
               <p>Aucune humeur enregistrée.</p>
             {% endif %}
+            {% if user.availability == 'Disponible' %}
+              <p class="pulsate">Statut : Disponible <span>🙂</span></p>
+            {% elif user.availability == 'Seul(e)' %}
+              <p class="pulsate">Statut : Préfère être seul(e) <span>😐</span></p>
+            {% else %}
+              <p>Statut : Inconnu</p>
+            {% endif %}
           </div>
         </div>
       </article>

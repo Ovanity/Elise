@@ -16,15 +16,32 @@
   </figure>
 
   <p class="subtitle">Humeur actuelle : <strong>{{ mood }}</strong></p>
+  <p class="subtitle">Disponibilité : <strong>{{ user.availability|capitalize }}</strong></p>
 
-  <!-- Button to view mood history, always displayed -->
-  <a class="button is-primary" href="{{ url_for('user_moods', username=username) }}">Historique des émotions</a>
-
-  {% if session.username != username %}
+  {% if session.username == username %}
+    <!-- Buttons to update availability -->
+    <form method="POST" action="{{ url_for('update_availability') }}">
+      <div class="field is-grouped">
+        <div class="control">
+          <button name="availability" value="Disponible" class="button is-success" type="submit">
+            Disponible pour discuter
+          </button>
+        </div>
+        <div class="control">
+          <button name="availability" value="Seul(e)" class="button is-danger" type="submit">
+            Préfère être seul(e)
+          </button>
+        </div>
+      </div>
+    </form>
+  {% else %}
     <p>
       Vous n'êtes pas connecté en tant que {{ username }}.
       <a href="{{ url_for('login') }}">Connexion</a>
     </p>
   {% endif %}
+
+  <!-- Button to view mood history, always displayed -->
+  <a class="button is-primary" href="{{ url_for('user_moods', username=username) }}">Historique des émotions</a>
 </div>
 {% endblock %}

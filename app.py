@@ -24,6 +24,7 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     moods = db.relationship('Mood', backref='user', lazy=True, order_by="Mood.created_at.desc()")
     profile_pic = db.Column(db.String(200), default='picture1.png')
+    availability = db.Column(db.String(20), default="Pas de statut")
 
 
 class Mood(db.Model):
@@ -53,6 +54,21 @@ def choose_profile_pic():
         return redirect(url_for('user_profile', username=current_user.username))
 
     return render_template('choose_profile_pic.html', images=images)
+
+
+@app.route('/update_availability', methods=['POST'])
+def update_availability():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    new_status = request.form.get('availability')
+    if new_status not in ["Disponible", "Seul(e)"]:
+        return "Invalid status", 400
+
+    current_user = User.query.filter_by(username=session['username']).first()
+    current_user.availability = new_status
+    db.session.commit()
+    return redirect(url_for('user_profile', username=current_user.username))
 
 
 ############################################
