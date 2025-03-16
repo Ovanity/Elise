@@ -2,53 +2,88 @@
 {% block title %}Présentation{% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="presentation-container" style="background-color: #fff8f9; border-radius: 15px; padding: 2rem; width: 100%; max-width: 100%; height: 80vh; overflow-y: auto;">
-    {% if session.username %}
-      <h1 class="title" style="color: #ff91a4;">🌸 Heureux de te revoir, {{ session.username }} ! 🌸</h1>
-      <p class="subtitle" style="font-size: 1.3rem;">
-        Tu es connectée à ton espace personnel. Ici, tu peux consulter tes anciennes humeurs, en ajouter de nouvelles, choisir une photo de profil que tu aimes, et surtout indiquer aux autres si tu souhaites discuter ou être tranquille.
-      </p>
-    {% else %}
-      <h1 class="title" style="color: #ff91a4;">🌼 Bienvenue sur MoodBoard 🌼</h1>
-      <p class="subtitle" style="font-size: 1.3rem;">
-        MoodBoard est une application douce et apaisante, créée spécialement pour partager et comprendre tes émotions au quotidien. Ici, tu pourras noter comment tu te sens, choisir une jolie photo de profil, et indiquer si tu es disponible pour discuter ou si tu préfères rester tranquille.
-      </p>
+<!-- Reduce the default Bulma section padding -->
+<section class="section" style="padding: 1rem 0;">
+  <!-- Container spans the full width, minimal horizontal padding -->
+  <div class="container" style="max-width: 100%; padding: 0 1rem; margin: 0 auto;">
+    <!-- Box with smaller padding and no extra margins -->
+    <div class="box" style="
+      text-align: center;
+      padding: 1rem;
+      margin: 0;
+      background-color: #fff8f9;
+      border-radius: 15px;
+    ">
 
-      <h2 class="subtitle" style="color: #80cfa9; margin-top: 2rem;">🌱 Comment utiliser MoodBoard ? 🌱</h2>
-      <ol style="text-align: left; margin: 0 auto; font-size: 1.2rem;">
-        <li style="margin-bottom: 1rem;">
-          <strong>Inscris-toi :</strong> Clique sur le bouton « Inscription » en haut à droite, choisis un nom d’utilisateur facile à retenir et un mot de passe simple.
-        </li>
-        <li style="margin-bottom: 1rem;">
-          <strong>Choisis ta photo :</strong> Une fois inscrite, sélectionne une image qui te représente et que tu aimes. Cette photo sera affichée dans ton profil.
-        </li>
-        <li style="margin-bottom: 1rem;">
-          <strong>Connecte-toi :</strong> Clique sur « Connexion » pour accéder à ton espace personnel avec les identifiants que tu as créés.
-        </li>
-      </ol>
+      {% if session.username %}
+        <h1 class="title" style="color: #ff91a4; margin-bottom: 1rem;">
+          🌸 Heureux de te revoir, {{ session.username }} ! 🌸
+        </h1>
+        <p class="subtitle" style="font-size: 1.3rem; margin-bottom: 1rem;">
+          Tu es connectée à ton espace personnel. Ici, tu peux consulter tes anciennes humeurs,
+          en ajouter de nouvelles, choisir une photo de profil que tu aimes, et surtout indiquer
+          aux autres si tu souhaites discuter ou être tranquille.
+        </p>
+      {% else %}
+        <h1 class="title" style="color: #ff91a4; margin-bottom: 1rem;">
+          🌼 Bienvenue sur MoodBoard 🌼
+        </h1>
+        <p class="subtitle" style="font-size: 1.3rem; margin-bottom: 1rem;">
+          MoodBoard est une application douce et apaisante, imaginée spécialement pour partager
+          et comprendre tes émotions au quotidien. Ici, tu pourras noter comment tu te sens,
+          choisir une jolie photo de profil, et indiquer si tu es disponible pour discuter ou
+          si tu préfères rester tranquille.
+        </p>
 
-      <h2 class="subtitle" style="color: #80cfa9; margin-top: 2rem;">✨ Que peux-tu faire une fois connectée ? ✨</h2>
-      <ul style="text-align: left; margin: 0 auto; font-size: 1.2rem;">
-        <li style="margin-bottom: 1rem;">
-          <strong>Partage ton humeur :</strong> Écris simplement comment tu te sens pour mieux comprendre tes émotions et informer les autres.
-        </li>
-        <li style="margin-bottom: 1rem;">
-          <strong>Définis ton statut :</strong> Indique si tu es disponible pour discuter (bouton « Disponible pour discuter 🙂 ») ou si tu préfères être seule (bouton « Préfère être seule 😌 »). Ton statut s’affichera avec une douce animation pour informer subtilement les autres.
-        </li>
-        <li style="margin-bottom: 1rem;">
-          <strong>Découvre des ressources :</strong> Selon ton humeur, tu auras accès à une playlist relaxante, un exercice de respiration simple ou une vidéo apaisante pour t’aider à te détendre.
-        </li>
-      </ul>
+        <h2 class="subtitle" style="color: #80cfa9; margin-top: 1.5rem; margin-bottom: 1rem;">
+          🌱 Comment utiliser MoodBoard ? 🌱
+        </h2>
+        <ol style="text-align: left; margin: 0 auto; font-size: 1.2rem;">
+          <li style="margin-bottom: 1rem;">
+            <strong>Inscris-toi :</strong> Clique sur « Inscription » en haut à droite,
+            choisis un nom d’utilisateur facile à retenir et un mot de passe simple.
+          </li>
+          <li style="margin-bottom: 1rem;">
+            <strong>Choisis ta photo :</strong> Une fois inscrite, sélectionne une image
+            qui te représente et que tu aimes. Cette photo sera affichée dans ton profil.
+          </li>
+          <li style="margin-bottom: 1rem;">
+            <strong>Connecte-toi :</strong> Clique sur « Connexion » pour accéder à ton
+            espace personnel avec les identifiants que tu as créés.
+          </li>
+        </ol>
 
-      <p class="subtitle" style="margin-top: 2rem; font-size: 1.3rem;">
-        Prends ton temps et profite de cet espace fait pour toi. Quand tu es prête, clique sur « Entrer » ci-dessous pour commencer 🌸.
-      </p>
-    {% endif %}
+        <h2 class="subtitle" style="color: #80cfa9; margin-top: 1.5rem; margin-bottom: 1rem;">
+          ✨ Que peux-tu faire une fois connectée ? ✨
+        </h2>
+        <ul style="text-align: left; margin: 0 auto; font-size: 1.2rem;">
+          <li style="margin-bottom: 1rem;">
+            <strong>Partage ton humeur :</strong> Écris simplement comment tu te sens
+            pour mieux comprendre tes émotions et informer les autres.
+          </li>
+          <li style="margin-bottom: 1rem;">
+            <strong>Définis ton statut :</strong> Indique si tu es disponible pour discuter
+            (« Disponible pour discuter 🙂 ») ou si tu préfères être seule (« Préfère être seule 😌 »).
+            Ton statut s’affichera avec une douce animation pour informer subtilement les autres.
+          </li>
+          <li style="margin-bottom: 1rem;">
+            <strong>Découvre des ressources :</strong> Selon ton humeur, tu auras accès à une playlist
+            relaxante, un exercice de respiration simple ou une vidéo apaisante pour t’aider à te détendre.
+          </li>
+        </ul>
 
-    <a class="button is-primary is-large" href="{{ url_for('index') }}" style="margin-top: 1.5rem; background-color: #ff91a4; border-color: transparent; font-size: 1.4rem;">
-      🌸 Entrer 🌸
-    </a>
+        <p class="subtitle" style="margin-top: 1.5rem; font-size: 1.3rem;">
+          Prends ton temps et profite de cet espace fait pour toi. Quand tu es prête,
+          clique sur « Entrer » ci-dessous pour commencer 🌸.
+        </p>
+      {% endif %}
+
+      <a class="button is-primary is-large"
+         href="{{ url_for('index') }}"
+         style="margin-top: 1rem; background-color: #ff91a4; border-color: transparent; font-size: 1.4rem;">
+        🌸 Entrer 🌸
+      </a>
+    </div>
   </div>
-</div>
+</section>
 {% endblock %}
