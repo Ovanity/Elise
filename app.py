@@ -8,8 +8,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MaCleSuperSecrete'
-# Base de données SQLite dans un fichier moods.db
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///moods.db")
+# Hardcoded PostgreSQL URL from Render
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://moods_user:iwBHTRsslOMITvDfsmVGnuOS2Tvbvk27@dpg-cvbiduij1k6c73dv1g1g-a.frankfurt-postgres.render.com/moods"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
