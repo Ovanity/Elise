@@ -5,46 +5,66 @@
   <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Mon Appli{% endblock %}</title>
+
+  <!-- Google Font for a cute style (Baloo 2) -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+
   <!-- Bulma CSS via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-  <!-- Custom styles for a pastel theme with larger elements for mobile -->
+
+  <!-- Custom styles for a pastel, cute, and mobile-friendly theme -->
   <style>
+    /* Use the cute font for the whole app */
     body {
       background-color: #f5f7fa; /* very light pastel blue-gray */
-      font-size: 1.2rem; /* increase base font size for better readability */
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.2rem; /* increased base font size for readability */
+      margin: 0;
+      padding: 0;
     }
+    /* Navbar with a subtle pastel gradient */
     .navbar {
-      background-color: #ffdde1; /* pastel pink */
+      background: linear-gradient(45deg, #ffdde1, #e4f0f7);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .navbar-item, .navbar-brand {
       color: #333;
-      font-size: 1.2rem; /* larger navbar text */
+      font-size: 1.3rem; /* larger navbar text */
     }
     .navbar-item:hover {
-      background-color: #ffe6ea;
+      background-color: rgba(255, 222, 225, 0.8);
     }
     footer.footer {
       background-color: #f0e6f6; /* pastel lavender */
       color: #555;
-      padding: 1.5rem 0; /* increased padding */
+      padding: 1.5rem 0;
       font-size: 1.1rem;
     }
-    /* Make container full width on mobile and increase padding */
+    /* Full-width container with more padding for mobile devices */
     .container {
       max-width: 100%;
-      padding: 1rem;
+      padding: 1.5rem;
     }
-    /* Increase heading sizes */
+    /* Larger headings for a bold look */
     .title {
-      font-size: 2rem;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
     }
     .subtitle {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
     }
-    /* Increase button size */
+    /* Increase button size for easier tapping */
     .button {
-      font-size: 1.1rem;
-      padding: 0.8rem 1.2rem;
+      font-size: 1.2rem;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+    }
+    /* Additional spacing for mobile */
+    @media screen and (max-width: 768px) {
+      .section {
+        padding: 2rem 1rem;
+      }
     }
   </style>
 </head>
