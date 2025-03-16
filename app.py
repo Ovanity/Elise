@@ -70,11 +70,13 @@ def update_availability():
     db.session.commit()
     return redirect(url_for('user_profile', username=current_user.username))
 
-
+@app.route('/')
+def presentation():
+    return render_template("presentation.html")
 ############################################
 # 3. Routes pour inscription / connexion
 ############################################
-@app.route('/')
+@app.route('/home')
 def index():
     users = User.query.all()
     return render_template('index.html', users=users)
