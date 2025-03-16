@@ -177,4 +177,4 @@ def user_moods(username):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Crée les tables avant de lancer l'application
-    app.run(debug=True)
+    app.run(debug=False)
