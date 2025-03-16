@@ -8,11 +8,15 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MaCleSuperSecrete'
-# Hardcoded PostgreSQL URL from Render
+# Use your Render PostgreSQL URL or fallback to SQLite if not set
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://moods_user:iwBHTRsslOMITvDfsmVGnuOS2Tvbvk27@dpg-cvbiduij1k6c73dv1g1g-a.frankfurt-postgres.render.com/moods"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+# Now that 'app' and 'db' are defined, import and initialize Flask-Migrate.
+from flask_migrate import Migrate
+migrate = Migrate(app, db)
 
 
 ############################################
@@ -251,13 +255,14 @@ def logout():
 ############################################
 @app.route('/add_mood', methods=['GET', 'POST'])
 def add_mood():
-    """
-    Permet à l'utilisateur connecté d'ajouter une humeur.
-    """
     if 'username' not in session:
         return redirect(url_for('login'))
 
     current_user = User.query.filter_by(username=session['username']).first()
+    if not current_user:
+        # User not found: clear session and redirect to login.
+        session.pop('username', None)
+        return redirect(url_for('login'))
 
     if request.method == 'POST':
         mood_text = request.form.get('mood_text')
