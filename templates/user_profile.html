@@ -6,14 +6,14 @@
 
   <h1 class="title" style="color:#D57EAC; margin-bottom:1rem;">🌸 Profil de {{ username }} 🌸</h1>
 
-  <!-- Profile Picture -->
+  <!-- Photo de profil -->
   <figure class="image is-128x128" style="margin:1rem auto;">
     <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="{{ username }}"
          style="border-radius:50%; border:3px solid #D57EAC;">
   </figure>
 
-  <!-- Current Mood and Availability -->
-  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius:15px; margin-top:1rem; padding:1.5rem;">
+  <!-- Humeur actuelle et disponibilité -->
+  <div class="box" style="background-color:rgba(255,250,255,0.95); border-radius:15px; margin-top:1rem; padding:1.5rem;">
     <p class="subtitle" style="color:#8A6878; font-size:1.3rem;">
       <strong>✨ Humeur actuelle :</strong> {{ mood }}
     </p>
@@ -23,7 +23,7 @@
   </div>
 
   {% if session.username == username %}
-    <!-- User actions (change photo and add mood) -->
+    <!-- Actions utilisateur (changer photo et ajouter humeur) -->
     <div class="buttons is-centered" style="margin-top:1rem;">
       <a class="button" style="background-color:#B5EAD7; color:#5D5C61;" href="{{ url_for('choose_profile_pic') }}">
         🖼️ Changer la photo
@@ -33,15 +33,15 @@
       </a>
     </div>
 
-    <!-- Availability update form -->
+    <!-- Availability update form with vertically stacked buttons -->
     <form method="POST" action="{{ url_for('update_availability') }}" style="margin-top:1rem;">
-      <div class="field is-grouped is-grouped-centered">
+      <div class="field" style="text-align: center;">
         <button name="availability" value="Disponible" class="button" type="submit"
-                style="background-color:#D57EAC; color:#fff; margin-right:0.5rem;">
+                style="background-color:#D57EAC; color:#fff; display:block; margin:0.5rem auto; width:80%;">
           😊 Disponible pour discuter
         </button>
         <button name="availability" value="Seul(e)" class="button" type="submit"
-                style="background-color:#FFAAA5; color:#fff;">
+                style="background-color:#FFAAA5; color:#fff; display:block; margin:0.5rem auto; width:80%;">
           😔 Préfère être seul(e)
         </button>
       </div>
@@ -62,12 +62,12 @@
   </div>
 
   <!-- Discreet guide at the bottom -->
-  <div class="box animated fadeInUp" style="background-color: rgba(255,250,255,0.95); border-radius:12px; color: #8A6878; margin-top:2rem; padding:1rem; font-size:0.9rem; text-align:left;">
+  <div class="box animated fadeInUp" style="background-color:rgba(255,250,255,0.95); border-radius:12px; color:#8A6878; margin-top:2rem; padding:1rem; font-size:0.9rem; text-align:left;">
     <p><strong>🌷 Petit guide du profil :</strong></p>
-    <ul style="margin-top:0.5rem; list-style: none; padding-left:0;">
+    <ul style="margin-top:0.5rem; list-style:none; padding-left:0;">
       <li>🖼️ <strong>Photo :</strong> Personnalise ton profil avec une jolie image.</li>
       <li>✨ <strong>Humeur :</strong> Exprime comment tu te sens aujourd'hui.</li>
-      <li>🌟 <strong>Disponibilité :</strong> Informe les autres de ta dispionibilité mentale.</li>
+      <li>🌟 <strong>Disponibilité :</strong> Informe tes amis de ton état d'esprit.</li>
       <li>📅 <strong>Historique :</strong> Consulte toutes tes humeurs précédentes.</li>
     </ul>
   </div>
@@ -76,8 +76,8 @@
 <style>
   /* Fade-in animation for smooth appearance */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
   }
   .animated.fadeIn {
     animation: fadeIn 1s ease-out;
@@ -86,7 +86,7 @@
   /* Responsive adjustments for mobile */
   @media (max-width:768px) {
     .title { font-size:2rem; }
-    .subtitle, p, li { font-size:1rem; }
+    .subtitle { font-size:1.3rem; }
     .button { padding:0.8rem 1.2rem; font-size:0.9rem; }
   }
 </style>
