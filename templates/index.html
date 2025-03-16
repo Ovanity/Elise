@@ -62,7 +62,7 @@
               margin-bottom: 1rem;
               box-shadow: 0 2px 8px rgba(213, 126, 172, 0.15);
               width: 100%;
-              box-sizing:border-box;">
+              box-sizing: border-box;">
     <article class="media" style="align-items: center;">
       <figure class="media-left" style="margin-right:1rem;">
         <p class="image is-64x64">
@@ -108,24 +108,17 @@
               padding: 1rem;
               margin-top:2rem;
               width:100%;
-              box-sizing:border-box;">
+              box-sizing: border-box;">
     <h1 class="title" style="color:#D57EAC; font-size:1.4rem;">💡 Boîte à idées 💡</h1>
     <p class="subtitle" style="color:#8A6878; font-size:1rem;">
-      Partage une musique, une vidéo, une suggestion, ou un petit mot ✨
+      Partage une musique, une vidéo, une suggestion ou un petit mot ✨
     </p>
     {% if session.username %}
       <form method="POST" action="{{ url_for('add_idea') }}">
         <div class="field">
-          <textarea class="textarea"
-                    name="idea_text"
-                    placeholder="Un lien ou ta pensée du jour... Exemple : Martin est un petit con"
-                    required
-                    style="border-radius:12px; font-size:0.95rem;
-                           white-space:pre-wrap; word-wrap:break-word;">
-          </textarea>
+          <textarea class="textarea" name="idea_text" placeholder="Un lien ou ta pensée du jour..." required style="border-radius:12px; font-size:0.95rem; white-space: pre-wrap; word-wrap: break-word;"></textarea>
         </div>
-        <button class="button is-success" type="submit"
-                style="background-color:#D57EAC; color:#fff; font-size:0.95rem;">
+        <button class="button is-success" type="submit" style="background-color:#D57EAC; color:#fff; font-size:0.95rem;">
           Poster mon idée 💌
         </button>
       </form>
@@ -145,18 +138,15 @@
                       margin-bottom: 1rem;
                       padding: 1rem;
                       width:100%;
-                      box-sizing:border-box;">
+                      box-sizing: border-box;">
             <article class="media">
               <figure class="media-left">
                 <p class="image is-48x48">
-                  <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}"
-                       alt="{{ idea.author.username }}"
-                       style="border-radius:50%; border:2px solid #D57EAC;">
+                  <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}" alt="{{ idea.author.username }}" style="border-radius:50%; border:2px solid #D57EAC;">
                 </p>
               </figure>
               <div class="media-content" style="font-size:0.95rem; color:#5D5C61;">
-                <div class="content"
-                     style="white-space:pre-wrap; word-wrap:break-word;">
+                <div class="content" style="white-space: pre-wrap; word-wrap: break-word;">
                   <strong>{{ idea.author.username }}</strong>
                   <small style="color:#B79CAC;">{{ idea.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
                   <p>{{ idea.idea_text }}</p>
@@ -165,10 +155,8 @@
               {% if session.username == idea.author.username %}
                 <div class="media-right">
                   <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.id) }}">
-                    <button class="button is-danger is-small"
-                            type="submit"
-                            style="margin-top:0.5rem;">
-                      Supprimer
+                    <button class="button is-danger is-small" type="submit" style="margin-top:0.5rem; border-radius:50%; padding:0.2rem 0.5rem; font-size:0.4rem;">
+                      ❌
                     </button>
                   </form>
                 </div>
@@ -195,7 +183,7 @@
             font-size:0.95rem;">
   <p><strong>🌷 Petit guide :</strong></p>
   <ul style="margin-top:0.5rem;">
-    <li>📖 <strong>Expression du jour :</strong> Découvre chaque jour une jolie expression française.</li>
+    <li>📖 <strong>Expression du jour :</strong> Découvre chaque jour une jolie expression française pour enrichir notre vocabulaire.</li>
     <li>💖 <strong>Boutons émotionnels :</strong> Ressources rapides adaptées à ton humeur.</li>
     <li>👥 <strong>Humeurs :</strong> Découvre comment se sentent les autres et s'ils sont disponibles mentalement.</li>
     <li>💡 <strong>Boîte à idées :</strong> Partage ce qui te tient à cœur. Tu peux supprimer tes propres idées.</li>
