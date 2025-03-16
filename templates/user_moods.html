@@ -2,12 +2,16 @@
 {% block title %}Les humeurs de {{ user.username }}{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container animated fadeIn" style="max-width:650px; margin:auto; padding:1rem;">
+
+  <!-- Header with profile picture -->
   <div class="box animated fadeIn" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
     <article class="media">
       <figure class="media-left">
         <p class="image is-128x128">
-          <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ user.username }}" style="border-radius:50%; border:3px solid #D57EAC;">
+          <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}"
+               alt="Photo de profil de {{ user.username }}"
+               style="border-radius:50%; border:3px solid #D57EAC;">
         </p>
       </figure>
       <div class="media-content">
@@ -16,29 +20,51 @@
     </article>
   </div>
 
+  <!-- Mood history as message bubbles -->
   {% if user.moods %}
     {% for mood in user.moods %}
       <div class="box animated fadeInUp" style="background-color: #FFFDF7; border-radius: 15px; margin-bottom: 1rem; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
         <div style="display: flex; align-items: center;">
           <figure class="image is-48x48" style="margin-right: 1rem;">
-            <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de {{ user.username }}" style="border-radius:50%; border:2px solid #D57EAC;">
+            <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}"
+                 alt="Photo de {{ user.username }}"
+                 style="border-radius:50%; border:2px solid #D57EAC;">
           </figure>
           <div>
-            <strong style="color: #5D5C61;">{{ user.username }}</strong>
+            <strong style="color: #5D5C61; font-size:1.1rem;">{{ user.username }}</strong>
             <small style="color:#B79CAC;">{{ mood.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
           </div>
         </div>
-        <p style="margin-top: 1rem; font-size: 1.2rem; color:#6E6D7A;">{{ mood.mood_text }}</p>
-
+        <p style="margin-top: 1rem; font-size: 1.1rem; color:#6E6D7A; white-space: pre-wrap; word-wrap: break-word;">
+          {{ mood.mood_text }}
+        </p>
         {% if session.username == user.username %}
           <form method="POST" action="{{ url_for('delete_mood', mood_id=mood.id) }}" style="margin-top: 1rem;">
-            <button class="button is-danger is-small" type="submit">Supprimer</button>
+            <button class="button is-danger is-small" type="submit" style="font-size:0.9rem;">Supprimer</button>
           </form>
         {% endif %}
       </div>
     {% endfor %}
   {% else %}
-    <p style="text-align: center; font-size: 1.2rem; color:#B79CAC;">Aucune humeur enregistrée.</p>
+    <p style="text-align: center; font-size: 1.1rem; color:#B79CAC;">Aucune humeur enregistrée.</p>
   {% endif %}
+
 </div>
+
+<style>
+  /* Fade-in animation for smooth appearance */
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .animated.fadeIn { animation: fadeIn 1s ease-out; }
+  .animated.fadeInUp { animation: fadeIn 1s ease-out; }
+
+  /* Mobile adjustments */
+  @media (max-width:768px) {
+    .title { font-size:2rem; }
+    .subtitle, p, li { font-size:1rem; }
+    .button { padding:0.8rem 1.2rem; font-size:0.9rem; }
+  }
+</style>
 {% endblock %}
