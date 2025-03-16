@@ -76,10 +76,27 @@ def presentation():
 ############################################
 # 3. Routes pour inscription / connexion
 ############################################
+import requests
+
 @app.route('/home')
 def index():
+    # URL for the quote of the day in French (They Said So API)
+    qod_url = "https://quotes.rest/qod?language=fr"
+    try:
+        response = requests.get(qod_url)
+        if response.status_code == 200:
+            data = response.json()
+            quote = data.get("contents", {}).get("quotes", [{}])[0].get("quote", "Aucun mot du jour trouvé.")
+            author = data.get("contents", {}).get("quotes", [{}])[0].get("author", "")
+        else:
+            quote = "Aucun mot du jour trouvé."
+            author = ""
+    except Exception as e:
+        quote = "Aucun mot du jour trouvé."
+        author = ""
+
     users = User.query.all()
-    return render_template('index.html', users=users)
+    return render_template('index.html', users=users, quote=quote, author=author)
 
 
 @app.route('/register', methods=['GET', 'POST'])
