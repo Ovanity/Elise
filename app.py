@@ -175,6 +175,6 @@ def user_moods(username):
 # 5. Création de la base de données au démarrage
 ############################################
 if __name__ == '__main__':
+ app.run(host='0.0.0.0', debug=True)
     with app.app_context():
         db.create_all()  # Crée les tables avant de lancer l'application
-   app.run(host='0.0.0.0', debug=True)
