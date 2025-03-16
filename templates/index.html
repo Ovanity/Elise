@@ -3,6 +3,25 @@
 {% block content %}
   <h1 class="title">Utilisateurs et leurs dernières humeurs</h1>
   
+  <!-- Emotion suggestion buttons for mobile -->
+  <div class="columns is-mobile is-multiline" style="margin-bottom: 2rem;">
+    <div class="column is-full-mobile is-one-third-tablet">
+      <a class="button is-warning is-fullwidth" href="#">
+        😰 Stress – Playlist
+      </a>
+    </div>
+    <div class="column is-full-mobile is-one-third-tablet">
+      <a class="button is-info is-fullwidth" href="#">
+        😓 Anxiété – Respiration
+      </a>
+    </div>
+    <div class="column is-full-mobile is-one-third-tablet">
+      <a class="button is-success is-fullwidth" href="#">
+        😌 Détente – 432hz Video
+      </a>
+    </div>
+  </div>
+
   {% for user in users %}
     <div class="box">
       <article class="media">
