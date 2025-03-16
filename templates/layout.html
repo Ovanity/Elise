@@ -2,19 +2,23 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <!-- Ensure proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Mon Appli{% endblock %}</title>
   <!-- Bulma CSS via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-  <!-- Custom styles for a pastel theme -->
+  <!-- Custom styles for a pastel theme with larger elements for mobile -->
   <style>
     body {
       background-color: #f5f7fa; /* very light pastel blue-gray */
+      font-size: 1.2rem; /* increase base font size for better readability */
     }
     .navbar {
       background-color: #ffdde1; /* pastel pink */
     }
     .navbar-item, .navbar-brand {
       color: #333;
+      font-size: 1.2rem; /* larger navbar text */
     }
     .navbar-item:hover {
       background-color: #ffe6ea;
@@ -22,7 +26,25 @@
     footer.footer {
       background-color: #f0e6f6; /* pastel lavender */
       color: #555;
-      padding: 1rem 0;
+      padding: 1.5rem 0; /* increased padding */
+      font-size: 1.1rem;
+    }
+    /* Make container full width on mobile and increase padding */
+    .container {
+      max-width: 100%;
+      padding: 1rem;
+    }
+    /* Increase heading sizes */
+    .title {
+      font-size: 2rem;
+    }
+    .subtitle {
+      font-size: 1.5rem;
+    }
+    /* Increase button size */
+    .button {
+      font-size: 1.1rem;
+      padding: 0.8rem 1.2rem;
     }
   </style>
 </head>
