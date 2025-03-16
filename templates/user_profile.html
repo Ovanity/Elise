@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}Profil de {{ username }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="title">Profil de {{ username }}</h1>
+
+  {% if session.username == username %}
+    <a class="button is-link" href="{{ url_for('choose_profile_pic') }}">Changer la photo de profil</a>
+    <a class="button is-info" href="{{ url_for('add_mood') }}">Ajouter une humeur</a>
+  {% endif %}
+
+  <!-- Display the user's profile picture -->
+  <figure class="image is-128x128" style="margin-bottom: 1rem;">
+    <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ username }}">
+  </figure>
+
+  <p class="subtitle">Humeur actuelle : <strong>{{ mood }}</strong></p>
+
+  <!-- Button to view mood history, always displayed -->
+  <a class="button is-primary" href="{{ url_for('user_moods', username=username) }}">Historique des émotions</a>
+
+  {% if session.username != username %}
+    <p>
+      Vous n'êtes pas connecté en tant que {{ username }}.
+      <a href="{{ url_for('login') }}">Connexion</a>
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

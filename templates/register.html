@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="title">Inscription</h1>
+  <form method="POST">
+    <div class="field">
+      <label class="label">Nom d'utilisateur</label>
+      <div class="control">
+        <input class="input" type="text" name="username" required>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Mot de passe</label>
+      <div class="control">
+        <input class="input" type="password" name="password" required>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <button class="button is-link" type="submit">S'inscrire</button>
+      </div>
+    </div>
+  </form>
+  <p class="has-text-centered">
+    Déjà inscrit ? <a href="{{ url_for('login') }}">Se connecter</a>.
+  </p>
+</div>
+{% endblock %}

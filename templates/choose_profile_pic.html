@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Choisir sa photo de profil{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="title">Choisir sa photo de profil</h1>
+  <form method="POST">
+    <div class="field">
+      <label class="label">Sélectionnez votre image :</label>
+      <div class="control">
+        {% for img in images %}
+          <label class="radio">
+            <input type="radio" name="profile_pic" value="{{ img }}">
+            <img src="{{ url_for('static', filename='images/' ~ img) }}" alt="{{ img }}" style="width: 64px;">
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <button class="button is-link" type="submit">Valider</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

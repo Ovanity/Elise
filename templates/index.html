@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Accueil - Humeurs{% endblock %}
+{% block content %}
+  <h1 class="title">Utilisateurs et leurs dernières humeurs</h1>
+  
+  {% for user in users %}
+    <div class="box">
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img src="{{ url_for('static', filename='images/' ~ user.profile_pic) }}" alt="Photo de profil de {{ user.username }}">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <h2 class="subtitle">
+              <a href="{{ url_for('user_profile', username=user.username) }}">{{ user.username }}</a>
+            </h2>
+            {% if user.moods %}
+              <p>
+                Dernière humeur : <strong>{{ user.moods[0].mood_text }}</strong> -
+                <em>{{ user.moods[0].created_at.strftime('%d/%m/%Y %H:%M') }}</em>
+              </p>
+            {% else %}
+              <p>Aucune humeur enregistrée.</p>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+    </div>
+  {% endfor %}
+{% endblock %}
