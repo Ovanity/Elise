@@ -1,9 +1,25 @@
 {% extends "layout.html" %}
 {% block title %}Accueil - Humeurs{% endblock %}
 {% block content %}
-  <h1 class="title">Utilisateurs et leurs dernières humeurs</h1>
-  
-  <!-- Emotion suggestion buttons for mobile -->
+
+  <!-- Bloc du mot du jour -->
+  <div class="box" style="background-color: #f7f3e9; border-radius: 10px; text-align: center; margin-bottom: 2rem; padding: 1rem;">
+    <h1 class="title" style="font-weight: bold; margin-bottom: 0.5rem;">Expression du jour</h1>
+    <p class="is-italic" style="font-size: 1.2rem;">
+      <strong>{{ word }}</strong>
+    </p>
+    {% if definition_sentences %}
+      <ul style="text-align: left; display: inline-block; margin-top: 1rem;">
+        {% for phrase in definition_sentences %}
+          <li style="margin-bottom: 0.5rem;">{{ phrase }}.</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p style="font-size: 1.2rem; margin-top: 1rem;">Aucune définition trouvée.</p>
+    {% endif %}
+  </div>
+
+  <!-- Boutons de suggestions d'émotions pour mobile -->
   <div class="columns is-mobile is-multiline" style="margin-bottom: 2rem;">
     <div class="column is-full-mobile is-one-third-tablet">
       <a class="button is-warning is-fullwidth" href="#">
@@ -22,6 +38,7 @@
     </div>
   </div>
 
+  <h1 class="title">Utilisateurs et leurs dernières humeurs</h1>
   {% for user in users %}
     <div class="box">
       <article class="media">
@@ -55,4 +72,13 @@
       </article>
     </div>
   {% endfor %}
+
+  <!-- Bloc explicatif discret en bas de page -->
+  <div class="box" style="background-color: #f0f0f0; border-radius: 8px; font-size: 0.9rem; color: #555; margin-top: 2rem; padding: 1rem;">
+    <p><strong>Explication :</strong></p>
+    <p><em>Expression du jour :</em> Un mot aléatoire en français, sélectionné chaque jour, avec une courte définition pour enrichir notre vocabulaire.</p>
+    <p><em>Boutons d'émotions :</em> Les boutons permettent d'accéder à des ressources adaptées à notre état émotionnel (playlist pour le stress, exercice de respiration pour l'anxiété, vidéo relaxante pour la détente).</p>
+    <p><em>Liste des utilisateurs :</em> Chaque utilisateur est affiché avec sa photo de profil, sa dernière humeur et son statut (indiquant s'il est disponible pour discuter ou s'il préfère être laissé seul(e)).</p>
+  </div>
+
 {% endblock %}

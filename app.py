@@ -78,26 +78,91 @@ def presentation():
 ############################################
 import requests
 
+import requests
+
+import requests
+import random
+
+import requests
+
+import requests, random, re
+from datetime import datetime
+
+import requests, random, re
+from datetime import datetime
+
 @app.route('/home')
 def index():
-    # URL for the quote of the day in French (They Said So API)
-    qod_url = "https://quotes.rest/qod?language=fr"
+    # Étape 1 : Récupérer un mot aléatoire depuis la catégorie "Catégorie:Expressions_en_français"
     try:
-        response = requests.get(qod_url)
-        if response.status_code == 200:
-            data = response.json()
-            quote = data.get("contents", {}).get("quotes", [{}])[0].get("quote", "Aucun mot du jour trouvé.")
-            author = data.get("contents", {}).get("quotes", [{}])[0].get("author", "")
+        category_url = (
+            "https://fr.wiktionary.org/w/api.php"
+            "?action=query"
+            "&list=categorymembers"
+            "&cmtitle=Catégorie:Expressions_en_français"
+            "&cmlimit=1000"
+            "&format=json"
+        )
+        resp_cat = requests.get(category_url)
+        if resp_cat.status_code == 200:
+            data_cat = resp_cat.json()
+            members = data_cat.get("query", {}).get("categorymembers", [])
+            if members:
+                # Utiliser la date actuelle comme graine pour choisir le mot de manière déterministe
+                current_day = datetime.utcnow().strftime("%Y%m%d")
+                random.seed(current_day)
+                random_word = random.choice(members).get("title", "mot inconnu")
+            else:
+                random_word = "mot inconnu"
         else:
-            quote = "Aucun mot du jour trouvé."
-            author = ""
+            random_word = "mot inconnu"
     except Exception as e:
-        quote = "Aucun mot du jour trouvé."
-        author = ""
+        random_word = "mot inconnu"
 
+    # Étape 2 : Récupérer jusqu'à 5 phrases de définition du mot choisi
+    try:
+        extract_url = (
+            "https://fr.wiktionary.org/w/api.php"
+            "?action=query"
+            "&prop=extracts"
+            "&explaintext=1"
+            "&exsentences=5"
+            f"&titles={random_word}"
+            "&format=json"
+        )
+        resp_extract = requests.get(extract_url)
+        if resp_extract.status_code == 200:
+            data_extract = resp_extract.json()
+            pages = data_extract.get("query", {}).get("pages", {})
+            page = next(iter(pages.values()))
+            definition = page.get("extract", "Aucune définition trouvée.")
+        else:
+            definition = "Aucune définition trouvée."
+    except Exception as e:
+        definition = "Aucune définition trouvée."
+
+    # Étape 3 : Nettoyer le texte de la définition
+    definition_cleaned = re.sub(r'={2,}.*?={2,}', '', definition, flags=re.DOTALL)
+    definition_cleaned = re.sub(r'--.*?--', '', definition_cleaned)
+    definition_cleaned = re.sub(
+        r"(Étymologie manquante ou incomplète\.?\s*Si vous la connaissez, vous pouvez l’ajouter en cliquant ici\.?)",
+        "",
+        definition_cleaned,
+        flags=re.IGNORECASE
+    )
+    # Supprimer les lignes vides résiduelles
+    lines = [line.strip() for line in definition_cleaned.split('\n') if line.strip()]
+    definition_cleaned = '\n'.join(lines)
+
+    # Étape 4 : Découper la définition en phrases
+    sentences = definition_cleaned.split('. ')
+    sentences = [s.strip().rstrip('.') for s in sentences if s.strip()]
+
+    # Récupérer la liste des utilisateurs
     users = User.query.all()
-    return render_template('index.html', users=users, quote=quote, author=author)
 
+    # Retourner la réponse via le template index.html
+    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
