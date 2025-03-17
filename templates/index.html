@@ -155,7 +155,7 @@
               {% if session.username == idea.author.username %}
                 <div class="media-right">
                   <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.id) }}">
-                    <button class="button is-danger is-small" type="submit" style="margin-top:0.5rem; border-radius:50%; padding:0.2rem 0.5rem; font-size:0.4rem;">
+                    <button class="button is-small" type="submit" style="margin-top:0.5rem;padding:0.2rem 0.5rem; font-size:0.5rem;">
                       ❌
                     </button>
                   </form>

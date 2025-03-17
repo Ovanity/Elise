@@ -40,7 +40,7 @@
         </p>
         {% if session.username == user.username %}
           <form method="POST" action="{{ url_for('delete_mood', mood_id=mood.id) }}" style="margin-top: 0.5rem;">
-            <button class="button is-danger is-small" type="submit" style="font-size:0.8rem; border-radius:50%;">❌</button>
+            <button class="button is-small" type="submit" style="font-size:0.5rem;">❌</button>
           </form>
         {% endif %}
       </div>
