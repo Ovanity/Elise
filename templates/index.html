@@ -2,28 +2,68 @@
 {% block title %}Accueil - Humeurs{% endblock %}
 {% block content %}
 
-<!-- Expression du jour -->
-<div class="box has-text-centered animated fadeIn"
-     style="background-color: rgba(255, 240, 245, 0.9);
+<!-- Carte du mot du jour (cliquable) -->
+<div id="wordCard" class="box animated fadeIn"
+     style="background-color: rgba(250,235,245,0.9);
             border-radius: 15px;
-            margin-bottom: 2rem;
-            padding: 2rem;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
             width: 100%;
-            box-sizing: border-box;">
-  <h1 class="title" style="color:#D57EAC; font-size: 1.5rem;">🌸 Expression du jour 🌸</h1>
-  <p class="is-italic" style="font-size: 1.3rem; color: #8A6878;">
-    <strong>{{ word }}</strong>
-  </p>
+            box-sizing: border-box;
+            cursor: pointer;">
+  <h1 class="title" style="color:#D57EAC; font-size: 1.5rem; margin-bottom: 0.5rem; text-align: center;">
+    🌸 Expression du jour 🌸
+  </h1>
+  <div id="wordHeader" style="display: flex; align-items: center; justify-content: center;">
+    <p class="is-italic" style="font-size: 1.3rem; color: #8A6878; margin: 0; text-align: center; flex: 1;">
+      <strong>{{ word }}</strong>
+    </p>
+    <!-- Indicateur de déploiement (flèche qui tourne) -->
+    <span id="toggleIcon" style="font-size: 1.3rem; color: #8A6878; transition: transform 0.3s ease;">▼</span>
+  </div>
+</div>
+
+<!-- Bloc de définition caché par défaut -->
+<div id="definitionBlock"
+     style="display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            background-color: rgba(255,240,245,0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            margin-bottom: 2rem;">
   {% if definition_sentences %}
-    <ul style="text-align: left; display: inline-block; margin-top: 1.5rem; color: #5D5C61; font-size:1rem;">
+    <ul style="text-align: left; margin: 0;">
       {% for phrase in definition_sentences %}
         <li style="margin-bottom: 0.6rem;">{{ phrase }}.</li>
       {% endfor %}
     </ul>
   {% else %}
-    <p style="font-size: 1rem; margin-top: 1rem; color: #B79CAC;">Aucune définition trouvée.</p>
+    <p style="font-size: 1rem; color: #B79CAC;">Aucune définition trouvée.</p>
   {% endif %}
 </div>
+
+<script>
+  // Bascule l'affichage de la définition avec animation et rotation de l'icône
+  document.getElementById('wordCard').addEventListener('click', function() {
+    var defBlock = document.getElementById('definitionBlock');
+    var toggleIcon = document.getElementById('toggleIcon');
+    if (defBlock.style.display === 'none' || defBlock.style.display === '') {
+      defBlock.style.display = 'block';
+      setTimeout(function(){
+        defBlock.style.opacity = 1;
+      }, 10);
+      toggleIcon.style.transform = 'rotate(180deg)';
+    } else {
+      defBlock.style.opacity = 0;
+      setTimeout(function(){
+        defBlock.style.display = 'none';
+      }, 500);
+      toggleIcon.style.transform = 'rotate(0deg)';
+    }
+  });
+</script>
 
 <!-- Boutons émotionnels -->
 <div class="columns is-mobile is-multiline animated fadeInUp" style="margin-bottom: 3rem;">
