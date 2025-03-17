@@ -63,7 +63,7 @@
 
   <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius:15px; padding:1rem; margin-top:1rem;">
   <p class="subtitle" style="color:#8A6878; font-size:1.1rem;">
-    <strong>Dernière connexion :</strong> {{ user.last_seen.strftime('%d/%m/%Y %H:%M') }}
+    Dernière visite : {% if user.last_seen %}{{ user.last_seen.strftime('%d/%m/%Y %H:%M') }}{% else %}N/A{% endif %}<br>
   </p>
   <p class="subtitle" style="color:#8A6878; font-size:1.1rem;">
     <strong>Nombre de visites :</strong> {{ user.visit_count }}
