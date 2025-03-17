@@ -94,6 +94,9 @@
           {% else %}
             <p style="margin-top:0.3rem;">Statut : Inconnu</p>
           {% endif %}
+          <p style="color:#8A6878; font-size:0.8rem; margin-top:0.3rem;">
+            Dernière visite : {{ user.last_seen.strftime('%d/%m/%Y %H:%M') }}<br>
+            Visites : {{ user.visit_count }}
         </div>
       </div>
     </article>
@@ -114,7 +117,7 @@
       💡 Boîte à idées 💡
     </h1>
 
-    <p class="subtitle" style="color:#8A6878; font-size:0.9rem; margin-bottom:1rem;">
+    <p class="subtitle" style="color:#8A6878; font-size:0.9rem; margin-bottom z:1rem;">Â
       Partage une musique, une vidéo, une suggestion ou un petit mot ✨
     </p>
 

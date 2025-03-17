@@ -33,6 +33,8 @@ class User(db.Model):
     profile_pic = db.Column(db.String(200), default='picture1.png')
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    visit_count = db.Column(db.Integer, default=0)
 
 
 class Idea(db.Model):
@@ -124,6 +126,29 @@ from datetime import datetime
 
 @app.route('/home')
 def index():
+    # Vérifier si l'utilisateur est connecté et s'il faut mettre à jour la visite
+    if 'username' in session:
+        current_time = datetime.utcnow()
+        last_index_visit = session.get("last_index_visit")
+        # Si ce n'est pas défini, c'est la première visite
+        if not last_index_visit:
+            session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+            current_user = User.query.filter_by(username=session['username']).first()
+            if current_user:
+                current_user.last_seen = current_time
+                current_user.visit_count += 1
+                db.session.commit()
+        else:
+            # Convertir le timestamp stocké en objet datetime
+            last_visit_time = datetime.strptime(last_index_visit, "%Y-%m-%dT%H:%M:%SZ")
+            # Si plus de 5 minutes se sont écoulées depuis la dernière visite
+            if (current_time - last_visit_time).total_seconds() > 300:
+                session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+                current_user = User.query.filter_by(username=session['username']).first()
+                if current_user:
+                    current_user.last_seen = current_time
+                    current_user.visit_count += 1
+                    db.session.commit()
     # Étape 1 : Récupérer un mot aléatoire depuis la catégorie "Catégorie:Expressions_en_français"
     try:
         category_url = (
