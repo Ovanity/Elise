@@ -11,6 +11,9 @@
   <!-- Bulma CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+
   <!-- Styles personnalisés -->
   <style>
     body {
@@ -113,10 +116,33 @@
   <div class="flower">🌹</div>
   <div class="flower">🌼</div>
 
+<style>
+    .frog {
+      width: 50px;              /* Largeur d’une frame */
+      height: -220px;             /* Hauteur d’une frame */
+      background: url("/static/images/frog_spritesheet.png") no-repeat 0 0;
+      /* L’animation saute entre 4 frames en 1 seconde, en boucle */
+      animation: frogIdle 1s steps(4) infinite;
+    }
+
+    @keyframes frogIdle {
+      from {
+        background-position-x: 0;     /* Frame 1 */
+      }
+      to {
+        background-position-x: -5px
+  </style>
+
+
+
+
+
+
+
   <!-- Navbar -->
   <nav class="navbar" role="navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a>
+      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a> <div class="frog"></div>
       <a role="button" class="navbar-burger" data-target="navbarMenu">
         <span></span><span></span><span></span>
       </a>
@@ -152,7 +178,7 @@
   <!-- Pied de page -->
   <footer class="footer">
     <div class="content has-text-centered">
-      <p>Fait avec ♥ par Martin. 2025. Version 0.1</p>
+      <p>Fait avec ♥ par Martin. 2025. Version 0.1 </p>
     </div>
   </footer>
 
