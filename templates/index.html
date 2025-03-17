@@ -110,11 +110,11 @@
               width:100%;
               box-sizing:border-box;">
 
-    <h1 class="title" style="color:#D57EAC; font-size:1.2rem; margin-bottom:1.5rem;">
+    <h1 class="title" style="color:#D57EAC; font-size:1.2rem; margin-bottom:1rem;">
       💡 Boîte à idées 💡
     </h1>
 
-    <p class="subtitle" style="color:#8A6878; font-size:0.9rem; margin-bottom:2rem;">
+    <p class="subtitle" style="color:#8A6878; font-size:0.9rem; margin-bottom:1rem;">
       Partage une musique, une vidéo, une suggestion ou un petit mot ✨
     </p>
 
@@ -139,60 +139,56 @@
       </p>
     {% endif %}
 
-{% if ideas %}
-  <div style="margin-top:1rem;">
+    {% if ideas %}
+  <div style="margin-top: 1rem;">
     {% for idea in ideas %}
       <!-- Bubble Container -->
-      <div class="box animated fadeInUp"
-           style="background-color:#FFFFFF;
-                  border-radius:10px;
-                  box-shadow:0 1px 4px rgba(0,0,0,0.1);
-                  padding:0.5rem 0.8rem;
-                  max-width:85%;
-                  display:inline-block;
-                  box-sizing:border-box;
-                  margin-bottom:0.6rem;">
+      <div class="animated fadeInUp"
+           style="
+             display: inline-block;
+             background-color: #FFFFFF;
+             border-radius: 10px;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+             padding: 0.6rem 0.8rem;
+             margin-bottom: 0.8rem;
+             max-width: 80%;
+             width: auto;
+             box-sizing: border-box;
+           ">
 
-        <!-- Header -->
-        <div style="display:flex; align-items:center; justify-content:space-between;">
-          <div style="display:flex; align-items:center;">
-            <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}"
-                 alt="{{ idea.author.username }}"
-                 style="width:35px; height:35px; border-radius:50%; border:1px solid #D57EAC; margin-right:0.5rem;">
+        <!-- Top Row: Profile pic on top, text below (left-aligned) -->
+<div style="text-align: left;">
+  <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}"
+       alt="{{ idea.author.username }}"
+       style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #D57EAC; display:block; margin-bottom:0.3rem;">
+  <p style="margin: 0; font-size: 0.85rem; color: #5D5C61;">
+    {{ idea.idea_text }}
+  </p>
+</div>
 
-            <strong style="font-size:0.85rem; color:#5D5C61;">
-              {{ idea.author.username }}
-            </strong>
-            <small style="font-size:0.7rem; color:#B79CAC; margin-left:0.3rem;">
-              {{ idea.created_at.strftime('%d/%m/%Y %H:%M') }}
-            </small>
-          </div>
+        <!-- Bottom Row: Time + Delete Button -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.4rem;">
+          <small style="font-size: 0.7rem; color: #B79CAC;">
+            {{ idea.created_at.strftime('%d/%m/%Y %H:%M') }}
+          </small>
 
           {% if session.username == idea.author.username %}
             <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.id) }}">
-              <button class="button is-small"
-                      type="submit"
-                      style="border:none; background:none; color:#FF5555; font-size:0.8rem; padding:0;">
+              <button type="submit"
+                      style="border: none; background: none; color: #FF5555; font-size: 0.8rem; padding: 0.5; cursor: pointer;">
                 ❌
               </button>
             </form>
           {% endif %}
         </div>
-
-        <!-- Idea Text -->
-        <p style="font-size:0.85rem; color:#5D5C61; margin:0.3rem 0 0 40px; text-align:left; white-space:pre-wrap;">
-          {{ idea.idea_text }}
-        </p>
-
       </div>
     {% endfor %}
   </div>
 {% else %}
-  <p style="font-size:0.9rem; color:#B79CAC; margin-top:1rem;">
+  <p style="font-size: 0.9rem; color:#B79CAC; margin-top:1rem;">
     Sois la première à partager une idée ! 🌷
   </p>
 {% endif %}
-
   </div>
 </div>
 
