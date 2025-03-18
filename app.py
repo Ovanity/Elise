@@ -236,13 +236,15 @@ def index():
     global_mood_data = []
     for user in users:
         if user.global_mood is not None and user.global_mood_updated_at is not None:
+            # Generate the full URL for the profile picture without modifying the database field.
+            profile_pic_url = url_for('static', filename='images/' + user.profile_pic)
             global_mood_data.append({
                 'x': user.global_mood_updated_at.isoformat(),
                 'y': user.global_mood,
-                'username': user.username
+                'username': user.username,
+                'profile_pic': profile_pic_url
             })
     print("Global Mood Data:", json.dumps(global_mood_data))
-    # Sort data by date (x value)
     global_mood_data.sort(key=lambda p: p['x'])
 
     return render_template("index.html", users=users, word=random_word, definition_sentences=sentences, ideas=ideas, global_mood_data=json.dumps(global_mood_data))

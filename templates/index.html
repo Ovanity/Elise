@@ -146,23 +146,43 @@
   </div>
 {% endfor %}
 
-<!-- At the bottom of your index.html, after the other content -->
-<div class="box" style="max-width: 100%; margin-top: 2rem; padding: 1rem;">
-  <h2 class="title" style="color:#D57EAC; font-size:1.4rem; text-align: center;">Évolution du Mood Global</h2>
-  <canvas id="globalMoodChart" style="width: 100%; height: 300px;"></canvas>
+<!-- Global Mood Chart Block -->
+<div class="box animated fadeIn"
+     style="background-color: rgba(255, 250, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-sizing: border-box;">
+  <h1 class="title" style="color:#D57EAC; font-size:1.4rem; text-align: center; margin-bottom: 1rem;">
+    📈 Évolution du Mood Global
+  </h1>
+  <div style="position: relative; height: 300px;">
+    <canvas id="globalMoodChart" style="max-width: 100%;"></canvas>
+  </div>
+  <!-- Custom Legend for the Chart -->
+  <div id="customLegend" style="text-align: center; margin-top: 1rem;"></div>
 </div>
 
-<!-- Include Chart.js CDN (if not already included in your layout) -->
+<!-- Include Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Parse the global mood data passed from Flask
+  // Parse the global mood data passed from Flask (ensure JSON contains valid profile_pic URLs)
   const globalMoodData = JSON.parse('{{ global_mood_data|safe }}');
 
-  // Map the data to the format required by Chart.js
+  // Create labels and data arrays
   const labels = globalMoodData.map(point => new Date(point.x).toLocaleDateString());
   const moodValues = globalMoodData.map(point => point.y);
 
-  // Configure and render the chart
+  // Preload images for each point to use as custom point markers
+  const pointImages = globalMoodData.map(point => {
+    const img = new Image();
+    img.src = point.profile_pic;  // e.g., "/static/images/picture2.png"
+    img.width = 20;  // small round image for mobile
+    img.height = 20;
+    return img;
+  });
+
+  // Create the Chart.js line chart
   const ctx = document.getElementById('globalMoodChart').getContext('2d');
   const globalMoodChart = new Chart(ctx, {
     type: 'line',
@@ -173,18 +193,35 @@
         data: moodValues,
         fill: false,
         borderColor: '#D57EAC',
-        tension: 0.1,
-        pointBackgroundColor: '#D57EAC',
-        pointRadius: 5
+        tension: 0.2,
+        pointStyle: pointImages,
+        pointRadius: 10,
+        pointHoverRadius: 12
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        // Disable built-in legend so we can create a custom one
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const dataPoint = globalMoodData[context.dataIndex];
+              return `${dataPoint.username}: ${context.parsed.y}`;
+            }
+          }
+        }
+      },
       scales: {
         x: {
-          type: 'category',
           title: {
             display: true,
             text: 'Date'
+          },
+          ticks: {
+            font: { size: 10 }
           }
         },
         y: {
@@ -192,21 +229,28 @@
           title: {
             display: true,
             text: 'Mood Score'
-          }
-        }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const username = globalMoodData[context.dataIndex].username;
-              return ` ${username}: ${context.parsed.y}`;
-            }
+          },
+          ticks: {
+            font: { size: 10 }
           }
         }
       }
     }
   });
+
+  // Generate a custom legend showing each user's profile picture and name
+  function generateCustomLegend(legendContainerId) {
+    const legendContainer = document.getElementById(legendContainerId);
+    let legendHtml = '';
+    globalMoodData.forEach(point => {
+      legendHtml += `<div style="display: inline-flex; align-items: center; margin: 0 10px;">
+                      <img src="${point.profile_pic}" style="width:20px; height:20px; border-radius:50%; margin-right:5px;">
+                      <span style="font-size:0.9rem; color:#5D5C61;">${point.username}</span>
+                     </div>`;
+    });
+    legendContainer.innerHTML = legendHtml;
+  }
+  generateCustomLegend('customLegend');
 </script>
 
 <!-- Boîte à idées musicales -->
