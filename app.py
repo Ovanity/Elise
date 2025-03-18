@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from zoneinfo import ZoneInfo
 from datetime import datetime
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -49,6 +50,7 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     moods = db.relationship('Mood', backref='user', lazy=True, order_by="Mood.created_at.desc()")
     global_mood = db.Column(db.Integer, default=5)
+    global_mood_updated_at = db.Column(db.DateTime, default=nowparis_naive)
     profile_pic = db.Column(db.String(200), default='picture1.png')
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
@@ -105,16 +107,19 @@ def update_global_mood():
     if 'username' not in session:
         return redirect(url_for('login'))
     try:
-        # Get the slider value from the form, converting to an integer.
+        # Récupérer la valeur du slider et la convertir en entier.
         global_mood = int(request.form.get('global_mood'))
     except (TypeError, ValueError):
-        global_mood = 5  # fallback value
+        global_mood = 5  # Valeur de secours
 
     current_user = User.query.filter_by(username=session['username']).first()
     if current_user:
         current_user.global_mood = global_mood
+        # Enregistrer la date de mise à jour de l'humeur globale
+        current_user.global_mood_updated_at = nowparis_naive()
         db.session.commit()
     return redirect(url_for('user_profile', username=current_user.username))
+
 @app.route('/update_availability', methods=['POST'])
 def update_availability():
     if 'username' not in session:
@@ -223,10 +228,24 @@ def index():
     sentences = definition_cleaned.split('. ')
     sentences = [s.strip().rstrip('.') for s in sentences if s.strip()]
 
+
+
     users = User.query.all()
     ideas = Idea.query.order_by(Idea.created_at.desc()).all()
 
-    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences, ideas=ideas)
+    global_mood_data = []
+    for user in users:
+        if user.global_mood is not None and user.global_mood_updated_at is not None:
+            global_mood_data.append({
+                'x': user.global_mood_updated_at.isoformat(),
+                'y': user.global_mood,
+                'username': user.username
+            })
+    print("Global Mood Data:", json.dumps(global_mood_data))
+    # Sort data by date (x value)
+    global_mood_data.sort(key=lambda p: p['x'])
+
+    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences, ideas=ideas, global_mood_data=json.dumps(global_mood_data))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

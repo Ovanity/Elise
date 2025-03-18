@@ -146,6 +146,69 @@
   </div>
 {% endfor %}
 
+<!-- At the bottom of your index.html, after the other content -->
+<div class="box" style="max-width: 100%; margin-top: 2rem; padding: 1rem;">
+  <h2 class="title" style="color:#D57EAC; font-size:1.4rem; text-align: center;">Évolution du Mood Global</h2>
+  <canvas id="globalMoodChart" style="width: 100%; height: 300px;"></canvas>
+</div>
+
+<!-- Include Chart.js CDN (if not already included in your layout) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Parse the global mood data passed from Flask
+  const globalMoodData = JSON.parse('{{ global_mood_data|safe }}');
+
+  // Map the data to the format required by Chart.js
+  const labels = globalMoodData.map(point => new Date(point.x).toLocaleDateString());
+  const moodValues = globalMoodData.map(point => point.y);
+
+  // Configure and render the chart
+  const ctx = document.getElementById('globalMoodChart').getContext('2d');
+  const globalMoodChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Mood Global',
+        data: moodValues,
+        fill: false,
+        borderColor: '#D57EAC',
+        tension: 0.1,
+        pointBackgroundColor: '#D57EAC',
+        pointRadius: 5
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          type: 'category',
+          title: {
+            display: true,
+            text: 'Date'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Mood Score'
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const username = globalMoodData[context.dataIndex].username;
+              return ` ${username}: ${context.parsed.y}`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
 <!-- Boîte à idées musicales -->
 <div class="container" style="max-width:100%; padding:0;">
   <div class="box animated fadeInRight"
