@@ -7,10 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def now_gmt_plus_1():
-    # "Etc/GMT-1" correspond à GMT+1
-    return datetime.now(ZoneInfo("Europe/Paris"))
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MaCleSuperSecrete'
 # Use your Render PostgreSQL URL or fallback to SQLite if not set
@@ -23,10 +19,21 @@ db = SQLAlchemy(app)
 from flask_migrate import Migrate
 migrate = Migrate(app, db)
 
-
+def nowparis():
+    # Return the current time in Europe/Paris (aware datetime)
+    return datetime.now(ZoneInfo("Europe/Paris"))
 ############################################
 # 1. Modèles de base de données
 ############################################
+from zoneinfo import ZoneInfo
+from datetime import datetime
+
+
+def now_paris():
+    # Return the current time in Europe/Paris (aware datetime)
+    return datetime.now(ZoneInfo("Europe/Paris"))
+
+
 class User(db.Model):
     __tablename__ = 'user'
     __table_args__ = {'extend_existing': True}
@@ -38,30 +45,30 @@ class User(db.Model):
     profile_pic = db.Column(db.String(200), default='picture1.png')
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
-    # Stockage en GMT+1 via now_gmt_plus_1 (callable)
-    last_seen = db.Column(db.DateTime(timezone=True), default=now_gmt_plus_1)
+    # Use timezone=True to ensure the database stores a TIMESTAMP WITH TIME ZONE
+    last_seen = db.Column(db.DateTime(timezone=True), default=now_paris)
     visit_count = db.Column(db.Integer, default=0)
 
 
 class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     idea_text = db.Column(db.String(500), nullable=False)
-    # Utilise now_gmt_plus_1 pour la date en GMT+1
-    created_at = db.Column(db.DateTime(timezone=True), default=now_gmt_plus_1)
+    # Use now_paris and timezone=True for a timezone-aware timestamp
+    created_at = db.Column(db.DateTime(timezone=True), default=now_paris)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class Mood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mood_text = db.Column(db.String(200), nullable=False)
-    # Utilise now_gmt_plus_1 pour la date en GMT+1
-    created_at = db.Column(db.DateTime(timezone=True), default=now_gmt_plus_1)
+    # Use now_paris and timezone=True for a timezone-aware timestamp
+    created_at = db.Column(db.DateTime(timezone=True), default=now_paris)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @app.route('/clock')
 def clock():
     # Obtenir l'heure actuelle en GMT+1
-    current_time = now_gmt_plus_1().strftime('%H:%M:%S')
+    current_time = nowparis().strftime('%H:%M:%S')
     # Récupérer tous les utilisateurs pour afficher leur dernière visite
     users = User.query.all()
     return render_template("clock.html", current_time=current_time, users=users)
