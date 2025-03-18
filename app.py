@@ -173,7 +173,7 @@ def index():
             members = data_cat.get("query", {}).get("categorymembers", [])
             if members:
                 # Utiliser la date actuelle comme graine pour choisir le mot de manière déterministe
-                current_day = datetime.utcnow().strftime("%Y%m%d")
+                current_day = now_gmt_plus_1().strftime("%Y%m%d")
                 random.seed(current_day)
                 random_word = random.choice(members).get("title", "mot inconnu")
             else:
