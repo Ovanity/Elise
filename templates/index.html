@@ -135,7 +135,7 @@
             <p style="margin-top:0.3rem;">Statut : Inconnu</p>
           {% endif %}
           <p style="color:#8A6878; font-size:0.8rem; margin-top:0.3rem;">
-            Niveau d'humeur globale : {{ user.global_mood if user.global_mood is defined else "N/A" }}<br>
+            Niveau d'humeur globale : {{ user.global_mood if user.global_mood is defined else "N/A" }}/10<br>
             Dernière visite : {% if user.last_seen %}{{ user.last_seen|paris_time }}<br>
             Nombre de visites : {{ user.visit_count }}
           </p>
