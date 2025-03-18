@@ -134,9 +134,11 @@
           {% else %}
             <p style="margin-top:0.3rem;">Statut : Inconnu</p>
           {% endif %}
+          <!-- Ajout des statistiques de visite -->
           <p style="color:#8A6878; font-size:0.8rem; margin-top:0.3rem;">
             Dernière visite : {% if user.last_seen %}{{ user.last_seen.strftime('%d/%m/%Y %H:%M') }}{% else %}N/A{% endif %}<br>
-Nombre de visites : {{ user.visit_count }}
+            Nombre de visites : {{ user.visit_count }}
+          </p>
         </div>
       </div>
     </article>
