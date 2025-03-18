@@ -9,7 +9,7 @@ load_dotenv()
 
 def now_gmt_plus_1():
     # "Etc/GMT-1" correspond à GMT+1
-    return datetime.now(ZoneInfo("Etc/GMT-1"))
+    return datetime.now(ZoneInfo("Europe/Paris"))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MaCleSuperSecrete'
@@ -369,6 +369,10 @@ def delete_idea(idea_id):
     # Redirect to the index page (or to a page showing ideas)
     return redirect(url_for('index'))
 
+@app.route('/clock')
+def clock():
+    current_time = now_gmt_plus_1().strftime('%H:%M:%S')
+    return f"<html><body><h1>Time in Paris: {current_time}</h1></body></html>"
 
 ############################################
 # 5. Création de la base de données au démarrage
