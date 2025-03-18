@@ -1,10 +1,177 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block title %}Jeu Incrémental Ultra-Animé{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="container" style="max-width:600px; margin:auto; text-align:center; padding:1rem;">
+  <h1 class="title" style="color:#D57EAC; animation: slideIn 1s ease;">Jeu Incrémental</h1>
+  <p class="subtitle" style="color:#8A6878; animation: fadeIn 1.5s ease;">Clique sur le bouton pour remplir la barre et déclencher des animations vibrantes !</p>
+
+  <!-- Animated Progress Bar -->
+  <div id="progressContainer" style="width: 100%; background-color: #f0e0f5; border-radius: 10px; overflow: hidden; margin-bottom: 1rem;">
+    <div id="progressBar" style="height: 30px; width: 0%; background: linear-gradient(90deg, #FFB6C1, #D57EAC, #FFB6C1); background-size: 200% 100%; animation: gradientShift 3s linear infinite;"></div>
+  </div>
+  <p id="progressText" style="color:#8A6878; font-size:1rem; margin-bottom: 1rem;">0 / 1000 clics</p>
+
+  <!-- Bonus Multiplier Banner (hidden by default) -->
+  <div id="multiplierBanner" style="display:none; font-size:1.2rem; color:#D57EAC; margin-bottom: 1rem; opacity:0; animation: fadeIn 0.5s forwards;"></div>
+
+  <!-- Click Button with Bounce and Shake Animation -->
+  <button id="clickButton" class="button is-primary"
+          style="background-color:#AEC6CF; color:#5D5C61; font-size:1.2rem; padding: 1rem 2rem; cursor:pointer;">
+    👆 Cliquer !
+  </button>
+
+  <!-- Collectibles Container for Random Emoji Effects -->
+  <div id="collectibles" style="position: relative; height: 100px; margin-top: 1rem;"></div>
+
+  <!-- Congratulatory Message -->
+  <div id="congrats" style="display:none; margin-top:1rem; font-size:1.5rem; color:#D57EAC; animation: fadeIn 1s forwards;">
+    🎉 Bravo, tu as atteint 1000 clics ! 🎉
+  </div>
+
+  <!-- Confetti Burst Container -->
+  <div id="confetti" style="position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; display:none;"></div>
+</div>
+
+<!-- CSS Animations -->
+<style>
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes buttonBounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(0.9); }
+    50% { transform: scale(1.1); }
+    70% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+  #clickButton:active {
+    animation: buttonBounce 0.3s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes confettiBurst {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(100px) scale(0.8); opacity: 0; }
+  }
+</style>
+
+<script>
+  const maxClicks = 1000;
+  let clickCount = 0;
+  let multiplier = 1;
+  let bonusActive = false;
+
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const clickButton = document.getElementById("clickButton");
+  const congrats = document.getElementById("congrats");
+  const multiplierBanner = document.getElementById("multiplierBanner");
+  const collectiblesContainer = document.getElementById("collectibles");
+  const confettiContainer = document.getElementById("confetti");
+
+  // Function to update progress bar, text, and trigger animations
+  function updateProgress() {
+    clickCount += multiplier;
+    let progressPercent = (clickCount / maxClicks) * 100;
+    if (progressPercent > 100) progressPercent = 100;
+    progressBar.style.width = progressPercent + "%";
+    progressText.textContent = `${clickCount} / ${maxClicks} clics`;
+
+    // Activate bonus multiplier at 200 clicks if not already active
+    if (!bonusActive && clickCount >= 200 && clickCount < maxClicks) {
+      bonusActive = true;
+      multiplier = 2;
+      multiplierBanner.textContent = "Bonus Multiplicateur Actif: x" + multiplier + " !";
+      multiplierBanner.style.display = "block";
+      // Launch confetti burst when bonus starts
+      launchConfetti();
+      setTimeout(() => {
+        multiplier = 1;
+        bonusActive = false;
+        multiplierBanner.style.display = "none";
+      }, 20000);
+    }
+
+    // Create a collectible emoji randomly every 50 clicks
+    if (clickCount % 50 < multiplier) {
+      createCollectible();
+    }
+
+    // When maximum clicks reached, disable the button and show congratulations
+    if (clickCount >= maxClicks) {
+      clickButton.disabled = true;
+      clickButton.textContent = "Terminé !";
+      congrats.style.display = "block";
+      let opacity = 0;
+      const fadeInInterval = setInterval(() => {
+        opacity += 0.05;
+        congrats.style.opacity = opacity;
+        if (opacity >= 1) clearInterval(fadeInInterval);
+      }, 50);
+    }
+  }
+
+  clickButton.addEventListener("click", updateProgress);
+
+  // Function to create a collectible emoji with a pop-in animation
+  function createCollectible() {
+    const emojiOptions = ["🌟", "🍀", "🍰", "🎈"];
+    const emoji = emojiOptions[Math.floor(Math.random() * emojiOptions.length)];
+    const item = document.createElement("div");
+    item.textContent = emoji;
+    item.style.position = "absolute";
+    item.style.fontSize = "1.5rem";
+    item.style.opacity = 1;
+    item.style.animation = "popIn 0.5s ease, fadeOut 1s 2.5s forwards";
+    // Random position within the collectibles container
+    item.style.top = Math.random() * 70 + "px";
+    item.style.left = Math.random() * (collectiblesContainer.offsetWidth - 30) + "px";
+    collectiblesContainer.appendChild(item);
+    // Remove after animation ends
+    setTimeout(() => {
+      if (collectiblesContainer.contains(item)) {
+        collectiblesContainer.removeChild(item);
+      }
+    }, 3500);
+  }
+
+  // Function to launch a burst of confetti emojis
+  function launchConfetti() {
+    confettiContainer.style.display = "block";
+    const confettiEmojis = ["🎉", "✨", "🎊"];
+    for (let i = 0; i < 10; i++) {
+      const piece = document.createElement("div");
+      piece.textContent = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+      piece.style.position = "absolute";
+      piece.style.fontSize = "1.5rem";
+      piece.style.top = "0px";
+      piece.style.left = Math.random() * window.innerWidth + "px";
+      piece.style.opacity = 1;
+      piece.style.animation = "confettiBurst 1s ease-out forwards";
+      confettiContainer.appendChild(piece);
+      setTimeout(() => {
+        if (confettiContainer.contains(piece)) {
+          confettiContainer.removeChild(piece);
+        }
+      }, 1000);
+    }
+    setTimeout(() => {
+      confettiContainer.style.display = "none";
+    }, 1000);
+  }
+</script>
+{% endblock %}

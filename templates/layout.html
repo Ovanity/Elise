@@ -35,8 +35,8 @@
     }
     .navbar {
       background: linear-gradient(45deg, #FADCD9, #FFF1F6);
-      background-size: 200% 200%;
-      animation: gradientShift 20s ease infinite;
+      background-size: 100% 200%;
+      animation: gradientShift 5s ease infinite;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
     .navbar-item, .navbar-brand {
@@ -142,7 +142,7 @@
   <!-- Navbar -->
   <nav class="navbar" role="navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a> <a class="navbar-item" href="{{ url_for('index') }}">Divertissement</a><div class="frog"></div>
+      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a> <a class="navbar-item" href="{{ url_for('games') }}">Divertissement</a><div class="frog"></div>
       <a role="button" class="navbar-burger" data-target="navbarMenu">
         <span></span><span></span><span></span>
       </a>

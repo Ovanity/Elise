@@ -290,6 +290,7 @@ def delete_mood(mood_id):
     db.session.commit()
     return redirect(url_for('user_profile', username=mood.user.username))
 
+
 @app.route('/delete_idea/<int:idea_id>', methods=['POST'])
 def delete_idea(idea_id):
     if 'username' not in session:
@@ -300,6 +301,11 @@ def delete_idea(idea_id):
     db.session.delete(idea)
     db.session.commit()
     return redirect(url_for('index'))
+
+
+@app.route('/games')
+def games():
+    return render_template('games.html')
 
 ############################################
 # 5. Création de la base de données au démarrage
