@@ -24,14 +24,7 @@ def nowparis():
     return datetime.now(ZoneInfo("Europe/Paris"))
 ############################################
 # 1. Modèles de base de données
-############################################
-from zoneinfo import ZoneInfo
-from datetime import datetime
-
-
-def now_paris():
-    # Return the current time in Europe/Paris (aware datetime)
-    return datetime.now(ZoneInfo("Europe/Paris"))
+###########################################
 
 
 class User(db.Model):
@@ -46,7 +39,7 @@ class User(db.Model):
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
     # Use timezone=True to ensure the database stores a TIMESTAMP WITH TIME ZONE
-    last_seen = db.Column(db.DateTime(timezone=True), default=now_paris)
+    last_seen = db.Column(db.DateTime(timezone=True), default=nowparis)
     visit_count = db.Column(db.Integer, default=0)
 
 
@@ -54,7 +47,7 @@ class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     idea_text = db.Column(db.String(500), nullable=False)
     # Use now_paris and timezone=True for a timezone-aware timestamp
-    created_at = db.Column(db.DateTime(timezone=True), default=now_paris)
+    created_at = db.Column(db.DateTime(timezone=True), default=nowparis)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -62,7 +55,7 @@ class Mood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mood_text = db.Column(db.String(200), nullable=False)
     # Use now_paris and timezone=True for a timezone-aware timestamp
-    created_at = db.Column(db.DateTime(timezone=True), default=now_paris)
+    created_at = db.Column(db.DateTime(timezone=True), default=nowparis)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @app.route('/clock')
