@@ -143,7 +143,7 @@ from datetime import datetime
 @app.route('/home')
 def index():
     if 'username' in session:
-        current_time = now_gmt_plus_1()  # Heure actuelle en GMT+1
+        current_time = nowparis()  # Heure actuelle en GMT+1
         last_index_visit = session.get("last_index_visit")
         if not last_index_visit:
             session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%S")
