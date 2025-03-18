@@ -2,9 +2,14 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 
 load_dotenv()
+
+def now_gmt_plus_1():
+    # "Etc/GMT-1" correspond à GMT+1
+    return datetime.now(ZoneInfo("Etc/GMT-1"))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MaCleSuperSecrete'
@@ -33,21 +38,24 @@ class User(db.Model):
     profile_pic = db.Column(db.String(200), default='picture1.png')
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    # Stockage en GMT+1 via now_gmt_plus_1 (callable)
+    last_seen = db.Column(db.DateTime, default=now_gmt_plus_1)
     visit_count = db.Column(db.Integer, default=0)
 
 
 class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     idea_text = db.Column(db.String(500), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # Utilise now_gmt_plus_1 pour la date en GMT+1
+    created_at = db.Column(db.DateTime, default=now_gmt_plus_1)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
 
 class Mood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mood_text = db.Column(db.String(200), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    # Clé étrangère liant l'humeur à l'utilisateur
+    # Utilise now_gmt_plus_1 pour la date en GMT+1
+    created_at = db.Column(db.DateTime, default=now_gmt_plus_1)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -127,28 +135,27 @@ from datetime import datetime
 @app.route('/home')
 def index():
     if 'username' in session:
-        current_time = datetime.utcnow()
+        current_time = now_gmt_plus_1()  # Heure actuelle en GMT+1
         last_index_visit = session.get("last_index_visit")
         if not last_index_visit:
-            session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+            session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%S")
             current_user = User.query.filter_by(username=session['username']).first()
             if current_user:
-                if current_user.visit_count is None:
-                    current_user.visit_count = 0
                 current_user.last_seen = current_time
-                current_user.visit_count += 1
+                current_user.visit_count = (current_user.visit_count or 0) + 1
                 db.session.commit()
         else:
-            last_visit_time = datetime.strptime(last_index_visit, "%Y-%m-%dT%H:%M:%SZ")
+            # On suppose que le timestamp stocké est déjà en GMT+1
+            tz = ZoneInfo("Etc/GMT-1")
+            last_visit_time = datetime.strptime(last_index_visit, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=tz)
             if (current_time - last_visit_time).total_seconds() > 300:
-                session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+                session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%S")
                 current_user = User.query.filter_by(username=session['username']).first()
                 if current_user:
-                    if current_user.visit_count is None:
-                        current_user.visit_count = 0
                     current_user.last_seen = current_time
-                    current_user.visit_count += 1
+                    current_user.visit_count = (current_user.visit_count or 0) + 1
                     db.session.commit()
+
 
     # Étape 1 : Récupérer un mot aléatoire depuis la catégorie "Catégorie:Expressions_en_français"
     try:
