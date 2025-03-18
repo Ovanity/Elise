@@ -147,7 +147,7 @@ def index():
         else:
             # On suppose que le timestamp stocké est déjà en GMT+1
             tz = ZoneInfo("Etc/GMT-1")
-            last_visit_time = datetime.strptime(last_index_visit, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=tz)
+            last_visit_time = datetime.strptime(last_index_visit.rstrip("Z"), "%Y-%m-%dT%H:%M:%S").replace(tzinfo=tz)
             if (current_time - last_visit_time).total_seconds() > 300:
                 session["last_index_visit"] = current_time.strftime("%Y-%m-%dT%H:%M:%S")
                 current_user = User.query.filter_by(username=session['username']).first()
