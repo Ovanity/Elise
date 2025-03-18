@@ -38,7 +38,7 @@
         <td>{{ user.username }}</td>
         <td>
           {% if user.last_seen %}
-            {{ user.last_seen.strftime('%d/%m/%Y %H:%M:%S') }}
+            {{ user.last_seen.astimezone(ZoneInfo("Europe/Paris")).strftime('%d/%m/%Y %H:%M') }}
           {% else %}
             N/A
           {% endif %}

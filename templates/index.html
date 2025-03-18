@@ -18,12 +18,12 @@
     <p class="is-italic" style="font-size: 1.3rem; color: #8A6878; margin: 0; text-align: center; flex: 1;">
       <strong>{{ word }}</strong>
     </p>
-    <!-- Indicateur de déploiement (flèche qui tourne) -->
+    <!-- Icône de basculement -->
     <span id="toggleIcon" style="font-size: 1rem; color: #8A6878; transition: transform 0.3s ease;">⬇️</span>
   </div>
 </div>
 
-<!-- Bloc de définition caché par défaut -->
+<!-- Bloc de définition (caché par défaut) -->
 <div id="definitionBlock"
      style="display: none;
             opacity: 0;
@@ -34,7 +34,7 @@
             box-sizing: border-box;
             margin-bottom: 2rem;">
   {% if definition_sentences %}
-    <ul style="text-align: left; margin: 0;">
+    <ul style="text-align: left; margin: 0; padding-left:1rem;">
       {% for phrase in definition_sentences %}
         <li style="margin-bottom: 0.6rem;">{{ phrase }}.</li>
       {% endfor %}
@@ -90,7 +90,7 @@
   </div>
 </div>
 
-<!-- Utilisateurs -->
+<!-- Liste des utilisateurs avec statistiques -->
 <h1 class="title animated fadeInLeft"
     style="color: #D57EAC; margin-bottom:1.5rem; font-size:1.5rem;">
     🌟 Humeurs du moment 🌟
@@ -134,11 +134,11 @@
           {% else %}
             <p style="margin-top:0.3rem;">Statut : Inconnu</p>
           {% endif %}
-          <!-- Ajout des statistiques de visite -->
           <p style="color:#8A6878; font-size:0.8rem; margin-top:0.3rem;">
-            Dernière visite : {% if user.last_seen %}{{ user.last_seen.strftime('%d/%m/%Y %H:%M') }}{% else %}N/A{% endif %}<br>
+            Dernière visite : {% if user.last_seen %}{{ user.last_seen|paris_time }}<br>
             Nombre de visites : {{ user.visit_count }}
           </p>
+          {% endif %}
         </div>
       </div>
     </article>
@@ -154,26 +154,19 @@
               margin-top:1rem;
               width:100%;
               box-sizing:border-box;">
-
     <h1 class="title" style="color:#D57EAC; font-size:1.2rem; margin-bottom:1.5rem;">
       💡 Boîte à idées 💡
     </h1>
-
-    <p class="subtitle" style="color:#8A6878; font-size:0.9rem; margin-bottom z:1rem;">
+    <p class="subtitle" style="color:#8A6878; font-size:0.9rem; margin-bottom:1rem;">
       Partage une musique, une vidéo, une suggestion ou un petit mot ✨
     </p>
-
     {% if session.username %}
       <form method="POST" action="{{ url_for('add_idea') }}">
         <div class="field">
-          <textarea class="textarea"
-                    name="idea_text"
-                    placeholder="Un lien ou ta pensée du jour..."
-                    required
-                    style="border-radius:6px; font-size:0.85rem; padding:0.5rem;"></textarea>
+          <textarea class="textarea" name="idea_text" placeholder="Un lien ou ta pensée du jour..."
+                    required style="border-radius:6px; font-size:0.85rem; padding:0.5rem; white-space: pre-wrap;"></textarea>
         </div>
-        <button class="button is-success"
-                type="submit"
+        <button class="button is-success" type="submit"
                 style="background-color:#D57EAC; color:#fff; font-size:0.85rem; padding:0.4rem 1rem;">
           Poster mon idée 💌
         </button>
@@ -185,55 +178,50 @@
     {% endif %}
 
     {% if ideas %}
-  <div style="margin-top: 1rem;">
-    {% for idea in ideas %}
-      <!-- Bubble Container -->
-      <div class="animated fadeInUp"
-           style="
-             display: inline-block;
-             background-color: #FFFFFF;
-             border-radius: 10px;
-             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-             padding: 0.6rem 0.8rem;
-             margin-bottom: 0.8rem;
-             max-width: 80%;
-             width: auto;
-             box-sizing: border-box;
-           ">
-
-        <!-- Top Row: Profile pic on top, text below (left-aligned) -->
-<div style="text-align: left;">
-  <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}"
-       alt="{{ idea.author.username }}"
-       style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #D57EAC; display:block; margin-bottom:0.3rem;">
-  <p style="margin: 0; font-size: 0.85rem; color: #5D5C61;">
-    {{ idea.idea_text }}
-  </p>
-</div>
-
-        <!-- Bottom Row: Time + Delete Button -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.4rem;">
-          <small style="font-size: 0.7rem; color: #B79CAC;">
-            {{ idea.created_at.strftime('%d/%m/%Y %H:%M') }}
-          </small>
-
-          {% if session.username == idea.author.username %}
-            <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.id) }}">
-              <button type="submit"
-                      style="border: none; background: none; color: #FF5555; font-size: 0.8rem; padding: 0.5; cursor: pointer;">
-                ❌
-              </button>
-            </form>
-          {% endif %}
-        </div>
+      <div style="margin-top:1rem;">
+        {% for idea in ideas %}
+          <!-- Bubble Container (type Apple Message) -->
+          <div class="animated fadeInUp"
+               style="display: inline-block;
+                      background-color: #FFFFFF;
+                      border-radius: 10px;
+                      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                      padding: 0.5rem 0.8rem;
+                      margin-bottom: 0.8rem;
+                      max-width: 80%;
+                      width: auto;
+                      box-sizing: border-box;">
+            <!-- Top Row: Profile picture on the left, idea text below it, aligned left -->
+            <div style="text-align: left;">
+              <img src="{{ url_for('static', filename='images/' ~ idea.author.profile_pic) }}"
+                   alt="{{ idea.author.username }}"
+                   style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #D57EAC; display:block; margin-bottom:0.3rem;">
+              <p style="margin: 0; font-size: 0.85rem; color: #5D5C61; line-height:1.2;">
+                {{ idea.idea_text }}
+              </p>
+            </div>
+            <!-- Bottom Row: Timestamp and delete button (if applicable) -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.3rem;">
+              <small style="font-size: 0.7rem; color: #B79CAC;">
+                {{ idea.created_at|paris_time }}
+              </small>
+              {% if session.username == idea.author.username %}
+                <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.id) }}">
+                  <button type="submit"
+                          style="border: none; background: none; color: #FF5555; font-size: 0.8rem; padding: 0; cursor: pointer;">
+                    ❌
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
-  </div>
-{% else %}
-  <p style="font-size: 0.9rem; color:#B79CAC; margin-top:1rem;">
-    Sois la première à partager une idée ! 🌷
-  </p>
-{% endif %}
+    {% else %}
+      <p style="font-size: 0.9rem; color:#B79CAC; margin-top:1rem;">
+        Sois la première à partager une idée ! 🌷
+      </p>
+    {% endif %}
   </div>
 </div>
 
