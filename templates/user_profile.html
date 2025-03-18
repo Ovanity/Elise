@@ -33,6 +33,63 @@
       </a>
     </div>
 
+<!-- Global Mood Slider -->
+<div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 1.5rem; margin-top: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+  <h2 class="subtitle" style="color:#8A6878; font-size:1.2rem; margin-bottom: 0.5rem;">Comment te sens-tu globalement ?</h2>
+  <form method="POST" action="{{ url_for('update_global_mood') }}">
+    <label for="global_mood" style="display:block; font-size:1rem; color:#5D5C61; margin-bottom: 0.5rem;">Niveau d'humeur (1 à 10) :</label>
+    <input type="range" id="global_mood" name="global_mood" min="1" max="10" value="{{ user.global_mood }}"
+           oninput="this.nextElementSibling.value = this.value"
+           style="width:80%; -webkit-appearance: none; height: 15px; border-radius: 10px; outline: none;
+                  background: linear-gradient(270deg, #ff9a9e, #fad0c4, #ff9a9e);
+                  background-size: 600% 600%;
+                  animation: gradientAnimation 2s ease infinite;">
+    <output style="font-size:1rem; color:#5D5C61; margin-top: 0.5rem; display: block; text-align: center;">{{ user.global_mood }}</output>
+    <br>
+    <button class="button is-primary" type="submit" style="background-color:#D57EAC; color:#fff;">
+      ✅
+    </button>
+  </form>
+</div>
+
+<!-- Animated Gradient CSS -->
+<style>
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  /* Custom slider styles for WebKit browsers */
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #D57EAC;
+    cursor: pointer;
+    border: 2px solid #fff;
+    margin-top: -5px; /* centers the thumb vertically */
+    transition: transform 0.2s ease;
+  }
+  input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+  /* Firefox slider thumb */
+  input[type=range]::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #D57EAC;
+    cursor: pointer;
+    border: 2px solid #fff;
+    transition: transform 0.2s ease;
+  }
+  input[type=range]::-moz-range-thumb:hover {
+    transform: scale(1.1);
+  }
+</style>
+
     <!-- Availability update form with vertically stacked buttons -->
     <form method="POST" action="{{ url_for('update_availability') }}" style="margin-top:1rem;">
       <div class="field" style="text-align: center;">

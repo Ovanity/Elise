@@ -48,6 +48,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     moods = db.relationship('Mood', backref='user', lazy=True, order_by="Mood.created_at.desc()")
+    global_mood = db.Column(db.Integer, default=5)
     profile_pic = db.Column(db.String(200), default='picture1.png')
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
@@ -99,6 +100,21 @@ def add_idea():
         return redirect(url_for('index'))
     return render_template("add_idea.html")
 
+@app.route('/update_global_mood', methods=['POST'])
+def update_global_mood():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    try:
+        # Get the slider value from the form, converting to an integer.
+        global_mood = int(request.form.get('global_mood'))
+    except (TypeError, ValueError):
+        global_mood = 5  # fallback value
+
+    current_user = User.query.filter_by(username=session['username']).first()
+    if current_user:
+        current_user.global_mood = global_mood
+        db.session.commit()
+    return redirect(url_for('user_profile', username=current_user.username))
 @app.route('/update_availability', methods=['POST'])
 def update_availability():
     if 'username' not in session:
