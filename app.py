@@ -39,7 +39,7 @@ class User(db.Model):
     availability = db.Column(db.String(20), default="Pas de statut")
     ideas = db.relationship('Idea', backref='author', lazy=True)
     # Stockage en GMT+1 via now_gmt_plus_1 (callable)
-    last_seen = db.Column(db.DateTime, default=now_gmt_plus_1)
+    last_seen = db.Column(db.DateTime(timezone=True), default=now_gmt_plus_1)
     visit_count = db.Column(db.Integer, default=0)
 
 
@@ -47,7 +47,7 @@ class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     idea_text = db.Column(db.String(500), nullable=False)
     # Utilise now_gmt_plus_1 pour la date en GMT+1
-    created_at = db.Column(db.DateTime, default=now_gmt_plus_1)
+    created_at = db.Column(db.DateTime(timezone=True), default=now_gmt_plus_1)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -55,8 +55,16 @@ class Mood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mood_text = db.Column(db.String(200), nullable=False)
     # Utilise now_gmt_plus_1 pour la date en GMT+1
-    created_at = db.Column(db.DateTime, default=now_gmt_plus_1)
+    created_at = db.Column(db.DateTime(timezone=True), default=now_gmt_plus_1)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+@app.route('/clock')
+def clock():
+    # Obtenir l'heure actuelle en GMT+1
+    current_time = now_gmt_plus_1().strftime('%H:%M:%S')
+    # Récupérer tous les utilisateurs pour afficher leur dernière visite
+    users = User.query.all()
+    return render_template("clock.html", current_time=current_time, users=users)
 
 
 ############################################
@@ -369,10 +377,6 @@ def delete_idea(idea_id):
     # Redirect to the index page (or to a page showing ideas)
     return redirect(url_for('index'))
 
-@app.route('/clock')
-def clock():
-    current_time = now_gmt_plus_1().strftime('%H:%M:%S')
-    return f"<html><body><h1>Time in Paris: {current_time}</h1></body></html>"
 
 ############################################
 # 5. Création de la base de données au démarrage
