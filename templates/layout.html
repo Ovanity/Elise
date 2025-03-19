@@ -11,10 +11,10 @@
   <!-- Bulma CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
+  <!-- Optional: Anime.js for additional animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
-
-  <!-- Styles personnalisés -->
+  <!-- Custom styles -->
   <style>
     body {
       background: linear-gradient(135deg, #FADCD9, #FFEFEF);
@@ -27,7 +27,7 @@
       position: relative;
     }
 
-    /* Navbar pastel animé */
+    /* Navbar with animated pastel gradient */
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -47,223 +47,134 @@
     .navbar-item:hover {
       transform: scale(1.05);
     }
-
-    /* Footer doux */
     footer.footer {
       background-color: #FFF1F6;
       color: #5D5C61;
       padding: 1.5rem 0;
       font-size: 1.1rem;
     }
-
     .container {
       max-width: 100%;
       padding: 1.5rem;
     }
-
-    /* Animation fadeIn douce */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .section {
-      animation: fadeIn 1s ease-out;
-    }
-
-    /* Fleurs animées tombantes en fond */
-    .flower {
-      position: fixed;
-      top: -10%;
-      font-size: 2rem;
-      opacity: 0.2;
-      pointer-events: none;
-      animation: flowerFall linear infinite;
-    }
-
-    @keyframes flowerFall {
-      to { transform: translateY(110vh) rotate(360deg); }
-    }
-
-    /* Variations pour différentes fleurs */
-    .flower:nth-child(1) { left: 10%; animation-duration: 15s; animation-delay: 0s; }
-    .flower:nth-child(2) { left: 20%; animation-duration: 18s; animation-delay: 2s; }
-    .flower:nth-child(3) { left: 30%; animation-duration: 20s; animation-delay: 4s; }
-    .flower:nth-child(4) { left: 40%; animation-duration: 16s; animation-delay: 1s; }
-    .flower:nth-child(5) { left: 50%; animation-duration: 22s; animation-delay: 3s; }
-    .flower:nth-child(6) { left: 60%; animation-duration: 17s; animation-delay: 5s; }
-    .flower:nth-child(7) { left: 70%; animation-duration: 19s; animation-delay: 6s; }
-    .flower:nth-child(8) { left: 80%; animation-duration: 14s; animation-delay: 2.5s; }
-    .flower:nth-child(9) { left: 90%; animation-duration: 21s; animation-delay: 4.5s; }
-    .flower:nth-child(10){ left: 95%; animation-duration: 23s; animation-delay: 1.5s; }
-
-    /* Adaptation pour mobile */
-    @media screen and (max-width: 768px) {
-      .section { padding: 2rem 1rem; }
-      .flower { font-size: 1.5rem; }
-    }
   </style>
 </head>
 <body>
-  <!-- Éléments fleurs animées -->
-  <div class="flower">🌸</div>
-  <div class="flower">🌺</div>
-  <div class="flower">🌷</div>
-  <div class="flower">🌹</div>
-  <div class="flower">🌼</div>
-  <div class="flower">🌸</div>
-  <div class="flower">🌺</div>
-  <div class="flower">🌷</div>
-  <div class="flower">🌹</div>
-  <div class="flower">🌼</div>
-
-<style>
-    .frog {
-      width: 50px;              /* Largeur d’une frame */
-      height: 80x;             /* Hauteur d’une frame */
-      background: url("/static/images/frog_spritesheet.png") no-repeat 0 0;
-      /* L’animation saute entre 4 frames en 1 seconde, en boucle */
-      animation: frogIdle 1s steps(4) infinite;
-    }
-
-    @keyframes frogIdle {
-      from {
-        background-position-x: 0;     /* Frame 1 */
-      }
-      to {
-        background-position-x: -5px
-  </style>
-
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a>
-    <a class="navbar-item" href="{{ url_for('games') }}">Divertissement</a>
-    <a role="button" class="navbar-burger" aria-label="menu" data-target="navbarMenu">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div id="navbarMenu" class="navbar-menu">
-    <div class="navbar-start">
-      {% if session.username %}
-        <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
-        <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
-        <a class="navbar-item" href="{{ url_for('majs') }}">Mises à Jours</a>
-      {% endif %}
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a>
+      <a class="navbar-item" href="{{ url_for('games') }}">Divertissement</a>
+      <!-- The burger button with proper data-target -->
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-    <div class="navbar-end">
-      <div class="navbar-item">
+    <div id="navMenu" class="navbar-menu">
+      <div class="navbar-start">
         {% if session.username %}
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span>🌸 Connecté : {{ session.username }}</span>
-            <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
-            <!-- Urgences button with shared class -->
-            <a class="button urgence-button"
-               style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
-              Urgences
-            </a>
-          </div>
-        {% else %}
-          <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
-          <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
-          <a class="button urgence-button"
-             style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
-            Urgences
-          </a>
+          <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
+          <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
+          <a class="navbar-item" href="{{ url_for('majs') }}">Mises à Jours</a>
         {% endif %}
       </div>
-    </div>
-  </div>
-</nav>
-
-<!-- Urgences Modal -->
-<div id="urgenceModal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-card" style="border-radius: 10px;">
-    <header class="modal-card-head" style="background-color: #FFCCCC;">
-      <p class="modal-card-title" style="color: #D23636;">Urgences</p>
-      <button class="delete" aria-label="close" id="closeUrgenceModal"></button>
-    </header>
-    <section class="modal-card-body" style="background-color: #FFF3F6;">
-      <div class="content" style="text-align: center;">
-        <p><strong>En cas d'urgence, choisis une action :</strong></p>
-        <div class="buttons is-centered" style="margin-top: 1rem;">
-          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:112">Appeler les Urgences (112)</a>
-          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:3114">Hotline Suicide 24h24 7j/7</a>
-          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:+33674721820">Appeler SOS Amitié 24h24 7j/7</a>
-          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:+33674721820">Appeler Martin</a>
-
+      <div class="navbar-end">
+        <div class="navbar-item">
+          {% if session.username %}
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span>🌸 Connecté : {{ session.username }}</span>
+              <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
+              <a class="button urgence-button" style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+                Urgences
+              </a>
+            </div>
+          {% else %}
+            <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
+            <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
+            <a class="button urgence-button" style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+              Urgences
+            </a>
+          {% endif %}
         </div>
       </div>
-    </section>
-    <footer class="modal-card-foot" style="background-color: #FFCCCC;">
-      <button class="button" id="closeUrgenceModal2" style="background-color: #D23636; color: #fff;">Fermer</button>
-    </footer>
+    </div>
+  </nav>
+
+  <!-- Urgences Modal -->
+  <div id="urgenceModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="border-radius: 10px;">
+      <header class="modal-card-head" style="background-color: #FFCCCC;">
+        <p class="modal-card-title" style="color: #D23636;">Urgences</p>
+        <button class="delete" aria-label="close" id="closeUrgenceModal"></button>
+      </header>
+      <section class="modal-card-body" style="background-color: #FFF3F6;">
+        <div class="content" style="text-align: center;">
+          <p><strong>En cas d'urgence, choisis une action :</strong></p>
+          <div class="buttons is-centered" style="margin-top: 1rem;">
+            <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:112">Appeler Urgences (112)</a>
+            <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:3114">Hotline Suicide 24h/7</a>
+            <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:+33674721820">Appeler SOS Amitié</a>
+            <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:+33674721820">Appeler Martin</a>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot" style="background-color: #FFCCCC;">
+        <button class="button" id="closeUrgenceModal2" style="background-color: #D23636; color: #fff;">Fermer</button>
+      </footer>
+    </div>
   </div>
-</div>
 
-<!-- JavaScript to control the burger menu and modal -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Toggle navbar burger
-    const navbarBurgers = Array.from(document.querySelectorAll('.navbar-burger'));
-    navbarBurgers.forEach(burger => {
-      burger.addEventListener('click', () => {
-        const target = burger.dataset.target;
-        const $target = document.getElementById(target);
-        burger.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
-      });
-    });
-
-    // Urgences modal functionality
-    const urgenceButtons = document.querySelectorAll('.urgence-button');
-    const urgenceModal = document.getElementById('urgenceModal');
-    const closeButtons = document.querySelectorAll('#closeUrgenceModal, #closeUrgenceModal2, .modal-background');
-
-    urgenceButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        urgenceModal.classList.add('is-active');
-      });
-    });
-
-    closeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        urgenceModal.classList.remove('is-active');
-      });
-    });
-  });
-</script>
-
-  <!-- Section principale -->
+  <!-- Main Content Section -->
   <section class="section">
     <div class="container">
       {% block content %}{% endblock %}
     </div>
   </section>
 
-  <!-- Pied de page -->
-<footer class="footer">
-  <div class="content has-text-centered">
-    <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
-      <p style="margin: 0; font-size: 0.9rem">Fait avec ♥ par Martin. 2025. Version 0.1</p>
-      </a>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+        <p style="margin: 0; font-size: 0.9rem">Fait avec ♥ par Martin. 2025. Version 0.1</p>
+        <a href="{{ url_for('majs') }}" class="button is-small" style="background-color: transparent; border: none; font-size: 0.9rem; cursor: pointer;">
+          ⏳ Voir les mises à jours
+        </a>
+      </div>
     </div>
-  </div>
-</footer>
+  </footer>
 
-  <!-- Script Navbar Burger -->
+  <!-- Script to control the burger menu and modal -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.navbar-burger').forEach(el => {
-        el.onclick = () => {
-          const menu = document.getElementById(el.dataset.target);
-          el.classList.toggle('is-active');
-          menu.classList.toggle('is-active');
-        };
+      // Toggle navbar burger
+      const navbarBurgers = document.querySelectorAll('.navbar-burger');
+      navbarBurgers.forEach(burger => {
+        burger.addEventListener('click', () => {
+          const targetId = burger.getAttribute('data-target');
+          const targetMenu = document.getElementById(targetId);
+          burger.classList.toggle('is-active');
+          targetMenu.classList.toggle('is-active');
+        });
+      });
+
+      // Urgences modal functionality
+      const urgenceButtons = document.querySelectorAll('.urgence-button');
+      const urgenceModal = document.getElementById('urgenceModal');
+      const closeElements = document.querySelectorAll('#closeUrgenceModal, #closeUrgenceModal2, .modal-background');
+      urgenceButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          urgenceModal.classList.add('is-active');
+        });
+      });
+      closeElements.forEach(el => {
+        el.addEventListener('click', () => {
+          urgenceModal.classList.remove('is-active');
+        });
       });
     });
   </script>
-
 </body>
 </html>
