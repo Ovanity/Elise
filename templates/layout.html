@@ -133,18 +133,11 @@
         background-position-x: -5px
   </style>
 
-
-
-
-
-
-
-<nav class="navbar" role="navigation" aria-label="navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a>
     <a class="navbar-item" href="{{ url_for('games') }}">Divertissement</a>
-    <div class="frog"></div>
-    <a role="button" class="navbar-burger" data-target="navbarMenu" aria-label="menu" aria-expanded="false">
+    <a role="button" class="navbar-burger" aria-label="menu" data-target="navbarMenu">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -155,36 +148,92 @@
       {% if session.username %}
         <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
         <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
-        <!-- Optional: Add your Updates button if desired -->
-        <a class="navbar-item is-hidden-desktop" href="{{ url_for('majs') }}">Mises à Jours</a>
+        <a class="navbar-item" href="{{ url_for('majs') }}">Mises à Jours</a>
       {% endif %}
     </div>
     <div class="navbar-end">
-  <div class="navbar-item">
-    {% if session.username %}
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span>🌸 Connecté : {{ session.username }}</span>
-        <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
-        <!-- Urgences button with a light red background -->
-        <a class="button"
-           href="{{ url_for('register') }}"
-           style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
-          Urgences
-        </a>
+      <div class="navbar-item">
+        {% if session.username %}
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span>🌸 Connecté : {{ session.username }}</span>
+            <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
+            <!-- Urgences button with shared class -->
+            <a class="button urgence-button"
+               style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+              Urgences
+            </a>
+          </div>
+        {% else %}
+          <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
+          <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
+          <a class="button urgence-button"
+             style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+            Urgences
+          </a>
+        {% endif %}
       </div>
-    {% else %}
-      <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
-      <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
-      <a class="button"
-           href="{{ url_for('register') }}"
-           style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
-          Urgences
-      </a>
-    {% endif %}
-  </div>
-</div>
+    </div>
   </div>
 </nav>
+
+<!-- Urgences Modal -->
+<div id="urgenceModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card" style="border-radius: 10px;">
+    <header class="modal-card-head" style="background-color: #FFCCCC;">
+      <p class="modal-card-title" style="color: #D23636;">Urgences</p>
+      <button class="delete" aria-label="close" id="closeUrgenceModal"></button>
+    </header>
+    <section class="modal-card-body" style="background-color: #FFF3F6;">
+      <div class="content" style="text-align: center;">
+        <p><strong>En cas d'urgence, choisis une action :</strong></p>
+        <div class="buttons is-centered" style="margin-top: 1rem;">
+          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:112">Appeler les Urgences (112)</a>
+          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:3114">Hotline Suicide 24h24 7j/7</a>
+          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:+33674721820">Appeler SOS Amitié 24h24 7j/7</a>
+          <a class="button" style="background-color: #FFAAAA; color: #D23636;" href="tel:+33674721820">Appeler Martin</a>
+
+        </div>
+      </div>
+    </section>
+    <footer class="modal-card-foot" style="background-color: #FFCCCC;">
+      <button class="button" id="closeUrgenceModal2" style="background-color: #D23636; color: #fff;">Fermer</button>
+    </footer>
+  </div>
+</div>
+
+<!-- JavaScript to control the burger menu and modal -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle navbar burger
+    const navbarBurgers = Array.from(document.querySelectorAll('.navbar-burger'));
+    navbarBurgers.forEach(burger => {
+      burger.addEventListener('click', () => {
+        const target = burger.dataset.target;
+        const $target = document.getElementById(target);
+        burger.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+      });
+    });
+
+    // Urgences modal functionality
+    const urgenceButtons = document.querySelectorAll('.urgence-button');
+    const urgenceModal = document.getElementById('urgenceModal');
+    const closeButtons = document.querySelectorAll('#closeUrgenceModal, #closeUrgenceModal2, .modal-background');
+
+    urgenceButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        urgenceModal.classList.add('is-active');
+      });
+    });
+
+    closeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        urgenceModal.classList.remove('is-active');
+      });
+    });
+  });
+</script>
 
   <!-- Section principale -->
   <section class="section">
@@ -215,5 +264,6 @@
       });
     });
   </script>
+
 </body>
 </html>
