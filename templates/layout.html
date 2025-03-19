@@ -139,35 +139,57 @@
 
 
 
-  <!-- Navbar -->
-  <nav class="navbar" role="navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a> <a class="navbar-item" href="{{ url_for('games') }}">Divertissement</a><div class="frog"></div>
-      <a role="button" class="navbar-burger" data-target="navbarMenu">
-        <span></span><span></span><span></span>
+<nav class="navbar" role="navigation" aria-label="navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="{{ url_for('index') }}">🌷 MOODBOARD 🌷</a>
+    <a class="navbar-item" href="{{ url_for('games') }}">Divertissement</a>
+    <div class="frog"></div>
+    <a role="button" class="navbar-burger" data-target="navbarMenu" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div id="navbarMenu" class="navbar-menu">
+    <div class="navbar-start">
+      {% if session.username %}
+        <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
+        <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
+        <!-- Always show 'Urgences' in the burger menu on mobile -->
+        <a class="navbar-item is-hidden-desktop" href="{{ url_for('register') }}"
+           style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+          Urgences
+        </a>
+        <!-- Optional: Add your Updates button if desired -->
+        <a class="navbar-item is-hidden-desktop" href="{{ url_for('majs') }}">Mises à Jours</a>
+      {% endif %}
+    </div>
+    <div class="navbar-end">
+  <div class="navbar-item">
+    {% if session.username %}
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span>🌸 Connecté : {{ session.username }}</span>
+        <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
+        <!-- Urgences button with a light red background -->
+        <a class="button"
+           href="{{ url_for('register') }}"
+           style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+          Urgences
+        </a>
+      </div>
+    {% else %}
+      <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
+      <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
+      <a class="button"
+           href="{{ url_for('register') }}"
+           style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
+          Urgences
       </a>
-    </div>
-    <div id="navbarMenu" class="navbar-menu">
-      <div class="navbar-start">
-        {% if session.username %}
-          <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
-          <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
-        {% endif %}
-      </div>
-      <div class="navbar-end">
-        <div class="navbar-item">
-          {% if session.username %}
-            <div>🌸 Connecté : {{ session.username }}</div>
-            <a class="button is-light" href="{{ url_for('logout') }}">Déconnexion</a>
-          {% else %}
-            <a class="button is-light" href="{{ url_for('login') }}">Connexion</a>
-            <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
-            <a class="button is-light" href="{{ url_for('register') }}">Inscription</a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </nav>
+    {% endif %}
+  </div>
+</div>
+  </div>
+</nav>
 
   <!-- Section principale -->
   <section class="section">
