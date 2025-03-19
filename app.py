@@ -57,6 +57,9 @@ class User(db.Model):
     # Stocke l'heure locale de Paris (datetime naïf)
     last_seen = db.Column(db.DateTime, default=nowparis_naive)
     visit_count = db.Column(db.Integer, default=0)
+    medication_taken = db.Column(db.Boolean, default=False)
+    medication_last_updated = db.Column(db.Date, default=nowparis_naive)
+
 
 class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -131,6 +134,29 @@ def update_availability():
     current_user.availability = new_status
     db.session.commit()
     return redirect(url_for('user_profile', username=current_user.username))
+
+
+@app.route('/update_medication', methods=['POST'])
+def update_medication():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    user = User.query.filter_by(username=session['username']).first()
+    if user:
+        # Obtenir la date actuelle en heure de Paris (naïve)
+        today = nowparis_naive()
+        # Si le statut n'a pas été mis à jour aujourd'hui, le réinitialiser à False
+        if user.medication_last_updated != today:
+            user.medication_taken = False
+
+        # Mettre à jour le statut en fonction de la case cochée dans le formulaire
+        # La valeur sera "on" si la case est cochée
+        user.medication_taken = (request.form.get("medication") == "on")
+        user.medication_last_updated = today
+        db.session.commit()
+
+    return redirect(url_for('user_profile', username=session['username']))
+
 
 @app.route('/')
 def presentation():
