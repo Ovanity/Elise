@@ -282,6 +282,12 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+@app.route('/majs')
+def majs():
+    return render_template('majs.html')
+
+
+
 @app.route('/add_mood', methods=['GET', 'POST'])
 def add_mood():
     if 'username' not in session:

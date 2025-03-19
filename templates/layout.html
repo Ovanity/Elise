@@ -177,11 +177,17 @@
   </section>
 
   <!-- Pied de page -->
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>Fait avec ♥ par Martin. 2025. Version 0.1 </p>
+<footer class="footer">
+  <div class="content has-text-centered">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+      <p style="margin: 0; font-size: 0.9rem">Fait avec ♥ par Martin. 2025. Version 0.1</p>
+      <a href="{{ url_for('majs') }}" class="button is-small"
+         style="background-color: transparent; border: none; font-size: 0.9rem; cursor: pointer;">
+        Clique pour voir les mises à jours ⏳
+      </a>
     </div>
-  </footer>
+  </div>
+</footer>
 
   <!-- Script Navbar Burger -->
   <script>
