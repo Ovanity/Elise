@@ -155,11 +155,6 @@
       {% if session.username %}
         <a class="navbar-item" href="{{ url_for('user_profile', username=session.username) }}">Mon Profil</a>
         <a class="navbar-item" href="{{ url_for('user_moods', username=session.username) }}">Mes Humeurs</a>
-        <!-- Always show 'Urgences' in the burger menu on mobile -->
-        <a class="navbar-item is-hidden-desktop" href="{{ url_for('register') }}"
-           style="background-color: #FFCCCC; border-color: #FFCCCC; color: #D23636;">
-          Urgences
-        </a>
         <!-- Optional: Add your Updates button if desired -->
         <a class="navbar-item is-hidden-desktop" href="{{ url_for('majs') }}">Mises à Jours</a>
       {% endif %}
@@ -203,9 +198,6 @@
   <div class="content has-text-centered">
     <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
       <p style="margin: 0; font-size: 0.9rem">Fait avec ♥ par Martin. 2025. Version 0.1</p>
-      <a href="{{ url_for('majs') }}" class="button is-small"
-         style="background-color: transparent; border: none; font-size: 0.9rem; cursor: pointer;">
-        Clique pour voir les mises à jours ⏳
       </a>
     </div>
   </div>
