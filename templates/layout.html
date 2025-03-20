@@ -58,45 +58,96 @@
       padding: 1.5rem;
     }
   </style>
+  <style>
+    /* Le conteneur de la pluie de fleurs occupe toute la fenêtre */
+    #flowerRain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; /* Doit être inférieur au contenu (content-wrapper) */
+      pointer-events: none; /* Permet aux clics de passer à travers */
+    }
+    /* Style de chaque fleur tombante */
+    .falling-flower {
+      position: absolute;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: 1;
+      z-index: 0;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(-100%);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110%);
+        opacity: 0;
+      }
+    }
+    /* Le conteneur du contenu doit avoir un z-index supérieur */
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+
+</head>
+<body>
+
+<div id="flowerRain"></div>
+
 <style>
-  /* Le conteneur de la pluie de fleurs occupe toute la fenêtre */
   #flowerRain {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0; /* Doit être inférieur au contenu */
-    pointer-events: none; /* Permet aux clics de passer à travers */
+    z-index: 0; /* Doit être derrière le contenu */
+    pointer-events: none; /* Pour que les clics passent à travers */
   }
-  /* Style de chaque fleur tombante */
-  .falling-flower {
+  .flower {
     position: absolute;
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: 1;
-    z-index: 0;
-  }
-  @keyframes fall {
-    0% {
-      transform: translateY(-50px);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(110vh); /* 110% de la hauteur du viewport */
-      opacity: 0;
-    }
-  }
-  /* Le conteneur du contenu doit avoir un z-index supérieur */
-  .content-wrapper {
-    position: relative;
-    z-index: 1;
+    font-size: 2rem; /* Vous pouvez ajuster la taille */
+    opacity: 0;
   }
 </style>
+<script>
+  function createFlower() {
+    const flowers = ["🌸", "🌼", "🌺", "🌷", "🌹"];
+    const flowerEl = document.createElement('div');
+    flowerEl.className = 'flower';
+    // Choose a random flower emoji
+    flowerEl.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+    // Set a random horizontal start position
+    const startX = Math.random() * window.innerWidth;
+    flowerEl.style.left = startX + "px";
+    // Start above the viewport
+    flowerEl.style.top = "-50px";
+    document.getElementById('flowerRain').appendChild(flowerEl);
 
-</head>
-<body>
-<div id="flowerRain"></div>
+    // Define a random duration between 4 and 7 seconds
+    const duration = Math.random() * 3000 + 4000;
+
+    anime({
+      targets: flowerEl,
+      top: [ "-50px", window.innerHeight + "px" ],
+      opacity: [1, 0],
+      rotate: [0, 360], // Rotate a full circle
+      easing: 'linear',
+      duration: duration,
+      complete: function() {
+        flowerEl.remove();
+      }
+    });
+  }
+
+  // Create a new flower every 500ms
+  setInterval(createFlower, 500);
+</script>
 
   <!-- Navbar -->
   <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -212,32 +263,6 @@
       });
     });
   </script>
-  <script>
-  function createFlower() {
-    const flowers = ["🌸", "🌼", "🌺", "🌷", "🌹"];
-    const flower = document.createElement('span');
-    flower.className = 'falling-flower';
-    // Choisir une fleur aléatoirement
-    flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
-    // Taille aléatoire entre 20px et 40px
-    const size = Math.floor(Math.random() * 20) + 20;
-    flower.style.fontSize = size + 'px';
-    // Position horizontale aléatoire
-    flower.style.left = Math.random() * 100 + 'vw';
-    // Durée d'animation aléatoire entre 5 et 10 secondes
-    const duration = Math.random() * 5 + 5;
-    flower.style.animationDuration = duration + 's';
-    // Délai d'animation aléatoire
-    flower.style.animationDelay = Math.random() * 5 + 's';
-    // Ajouter la fleur au conteneur
-    document.getElementById('flowerRain').appendChild(flower);
-    // Supprimer la fleur après l'animation
-    setTimeout(() => {
-      flower.remove();
-    }, (duration + 1) * 1000);
-  }
-  // Créer une nouvelle fleur toutes les 500 ms
-  setInterval(createFlower, 500);
-</script>
+
 </body>
 </html>
