@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, a
 from flask_sqlalchemy import SQLAlchemy
 from zoneinfo import ZoneInfo
 from datetime import datetime
+from datetime import timedelta
 from dotenv import load_dotenv
 import json
 
@@ -60,6 +61,12 @@ class User(db.Model):
     medication_taken = db.Column(db.Boolean, default=False)
     medication_last_updated = db.Column(db.Date, default=nowparis_naive)
 
+class DailyMood(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    score = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.Date, default=nowparis_naive, nullable=False)  # Stocke uniquement la date (sans l'heure)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
 
 class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -110,15 +117,21 @@ def update_global_mood():
     if 'username' not in session:
         return redirect(url_for('login'))
     try:
-        # Récupérer la valeur du slider et la convertir en entier.
-        global_mood = int(request.form.get('global_mood'))
+        new_score = int(request.form.get('global_mood'))
     except (TypeError, ValueError):
-        global_mood = 5  # Valeur de secours
-
+        new_score = 5  # valeur par défaut
     current_user = User.query.filter_by(username=session['username']).first()
     if current_user:
-        current_user.global_mood = global_mood
-        # Enregistrer la date de mise à jour de l'humeur globale
+        today = nowparis_naive().date()  # Obtenir la date actuelle en heure de Paris (naïf)
+        # Chercher une entrée existante pour aujourd'hui
+        daily_mood = DailyMood.query.filter_by(user_id=current_user.id, date=today).first()
+        if daily_mood is None:
+            daily_mood = DailyMood(score=new_score, date=today, user_id=current_user.id)
+            db.session.add(daily_mood)
+        else:
+            daily_mood.score = new_score  # Met à jour l'entrée existante si besoin
+        # Met à jour également le score global stocké dans l'utilisateur (pour affichage immédiat)
+        current_user.global_mood = new_score
         current_user.global_mood_updated_at = nowparis_naive()
         db.session.commit()
     return redirect(url_for('user_profile', username=current_user.username))
@@ -260,20 +273,27 @@ def index():
     ideas = Idea.query.order_by(Idea.created_at.desc()).all()
 
     global_mood_data = []
+    today = nowparis_naive().date()  # Correctly call the function here
+    one_week_ago = today - timedelta(days=7)
+
     for user in users:
-        if user.global_mood is not None and user.global_mood_updated_at is not None:
-            # Generate the full URL for the profile picture without modifying the database field.
-            profile_pic_url = url_for('static', filename='images/' + user.profile_pic)
+        daily_moods = DailyMood.query.filter(
+            DailyMood.user_id == user.id,
+            DailyMood.date >= one_week_ago
+        ).order_by(DailyMood.date.asc()).all()
+        profile_pic_url = url_for('static', filename='images/' + user.profile_pic)
+        for dm in daily_moods:
             global_mood_data.append({
-                'x': user.global_mood_updated_at.isoformat(),
-                'y': user.global_mood,
+                'x': dm.date.isoformat(),
+                'y': dm.score,
                 'username': user.username,
                 'profile_pic': profile_pic_url
             })
-    print("Global Mood Data:", json.dumps(global_mood_data))
     global_mood_data.sort(key=lambda p: p['x'])
+    print("Global Mood Data:", json.dumps(global_mood_data))
 
-    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences, ideas=ideas, global_mood_data=json.dumps(global_mood_data))
+    return render_template("index.html", users=users, word=random_word, definition_sentences=sentences, ideas=ideas,
+                           global_mood_data=json.dumps(global_mood_data))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
