@@ -60,6 +60,7 @@ class User(db.Model):
     visit_count = db.Column(db.Integer, default=0)
     medication_taken = db.Column(db.Boolean, default=False)
     medication_last_updated = db.Column(db.Date, default=nowparis_naive)
+    medication_streak = db.Column(db.Integer, default=0)
 
 class DailyMood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -153,21 +154,26 @@ def update_availability():
 def update_medication():
     if 'username' not in session:
         return redirect(url_for('login'))
-
     user = User.query.filter_by(username=session['username']).first()
     if user:
-        # Obtenir la date actuelle en heure de Paris (naïve)
-        today = nowparis_naive()
-        # Si le statut n'a pas été mis à jour aujourd'hui, le réinitialiser à False
-        if user.medication_last_updated != today:
+        today = nowparis_naive().date()
+        # Get the submitted value; checkbox returns "on" if checked
+        taken = (request.form.get("medication") == "on")
+        # If the user is taking their medication today and it wasn't recorded yet:
+        if taken:
+            if user.medication_last_updated is None or user.medication_last_updated < today:
+                if user.medication_last_updated is not None and (today - user.medication_last_updated).days == 1:
+                    user.medication_streak = (user.medication_streak or 0) + 1
+                else:
+                    user.medication_streak = 1
+                user.medication_taken = True
+                user.medication_last_updated = today
+                db.session.commit()
+        else:
             user.medication_taken = False
-
-        # Mettre à jour le statut en fonction de la case cochée dans le formulaire
-        # La valeur sera "on" si la case est cochée
-        user.medication_taken = (request.form.get("medication") == "on")
-        user.medication_last_updated = today
-        db.session.commit()
-
+            user.medication_streak = 0
+            user.medication_last_updated = today
+            db.session.commit()
     return redirect(url_for('user_profile', username=session['username']))
 
 

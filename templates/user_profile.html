@@ -33,6 +33,20 @@
       </a>
     </div>
 
+      <!-- Availability update form with vertically stacked buttons -->
+    <form method="POST" action="{{ url_for('update_availability') }}" style="margin-top:1rem;">
+      <div class="field" style="text-align: center;">
+        <button name="availability" value="Disponible" class="button" type="submit"
+                style="background-color:#D57EAC; color:#fff; display:block; margin:0.5rem auto; width:80%;">
+          😊 Disponible pour discuter
+        </button>
+        <button name="availability" value="Seul(e)" class="button" type="submit"
+                style="background-color:#FFAAA5; color:#fff; display:block; margin:0.5rem auto; width:80%;">
+          😔 Préfère être seul(e)
+        </button>
+      </div>
+    </form>
+
 <!-- Global Mood Slider -->
 <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 1.5rem; margin-top: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
   <h2 class="subtitle" style="color:#8A6878; font-size:1.2rem; margin-bottom: 0.5rem;">Comment te sens-tu globalement ?</h2>
@@ -90,38 +104,20 @@
   }
 </style>
 
-    <!-- Availability update form with vertically stacked buttons -->
-    <form method="POST" action="{{ url_for('update_availability') }}" style="margin-top:1rem;">
-      <div class="field" style="text-align: center;">
-        <button name="availability" value="Disponible" class="button" type="submit"
-                style="background-color:#D57EAC; color:#fff; display:block; margin:0.5rem auto; width:80%;">
-          😊 Disponible pour discuter
-        </button>
-        <button name="availability" value="Seul(e)" class="button" type="submit"
-                style="background-color:#FFAAA5; color:#fff; display:block; margin:0.5rem auto; width:80%;">
-          😔 Préfère être seul(e)
-        </button>
-      </div>
-    </form>
-  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius: 15px; padding: 1rem; margin-top: 1rem; text-align: center;">
-    <form method="POST" action="{{ url_for('update_medication') }}">
-      <div class="field">
-        <label class="checkbox" style="font-size: 1rem; color: #8A6878;">
-          <input type="checkbox" name="medication" {% if user.medication_taken %}checked{% endif %}>
-          J'ai pris mes médicaments aujourd'hui
-        </label>
-      </div>
-      <div class="field">
-        <button class="button is-link" type="submit" style="margin-top: 0.5rem; background-color: #D57EAC; border-color: transparent;">
-          Mettre à jour
-        </button>
-      </div>
-    </form>
+  <!-- Medication Tracker Streak -->
+  <div class="box" style="background-color: rgba(255,250,255,0.95); border-radius:15px; padding:1rem; margin-top:1rem;">
     {% if user.medication_taken %}
-      <div class="notification is-success" style="margin-top: 1rem; text-align: center;">
-        Félicitations ! 👍
-      </div>
+      <p class="subtitle" style="color:#8A6878; font-size:1.1rem;">
+        Félicitations ! Tu as pris tes médicaments aujourd'hui 👍
+      </p>
+    {% else %}
+      <p class="subtitle" style="color:#8A6878; font-size:1.1rem;">
+        N'oublie pas de prendre tes médicaments 💊
+      </p>
     {% endif %}
+    <p class="subtitle" style="color:#8A6878; font-size:1.1rem;">
+      <strong>Streak :</strong> {{ user.medication_streak }} jour(s)
+    </p>
   </div>
   {% else %}
     <p style="color:#8A6878; margin-top:1rem;">
