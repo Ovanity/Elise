@@ -154,26 +154,40 @@ def update_availability():
 def update_medication():
     if 'username' not in session:
         return redirect(url_for('login'))
+
     user = User.query.filter_by(username=session['username']).first()
-    if user:
-        today = nowparis_naive().date()
-        # Get the submitted value; checkbox returns "on" if checked
-        taken = (request.form.get("medication") == "on")
-        # If the user is taking their medication today and it wasn't recorded yet:
-        if taken:
-            if user.medication_last_updated is None or user.medication_last_updated < today:
-                if user.medication_last_updated is not None and (today - user.medication_last_updated).days == 1:
-                    user.medication_streak = (user.medication_streak or 0) + 1
-                else:
-                    user.medication_streak = 1
-                user.medication_taken = True
-                user.medication_last_updated = today
-                db.session.commit()
+    if not user:
+        return redirect(url_for('login'))
+
+    # Get today's date in Paris (naïve datetime assumed to be in Paris time)
+    today = nowparis_naive().date()
+
+    # The checkbox returns "on" if checked, otherwise None
+    taken = request.form.get("medication") == "on"
+
+    print(f"Updating medication for user {user.username}. Today: {today}, Taken: {taken}")
+
+    # Ensure the streak is initialized to 0 if it's None
+    if user.medication_streak is None:
+        user.medication_streak = 0
+
+    # If no update has been made yet, or the last update was before today
+    if user.medication_last_updated is None or user.medication_last_updated < today:
+        # If the previous update was exactly yesterday, increment the streak
+        if user.medication_last_updated is not None and (today - user.medication_last_updated).days == 1:
+            user.medication_streak += 1
         else:
-            user.medication_taken = False
-            user.medication_streak = 0
-            user.medication_last_updated = today
-            db.session.commit()
+            user.medication_streak = 1  # Start a new streak otherwise
+
+        user.medication_taken = taken
+        user.medication_last_updated = today
+        print(f"New medication update for {user.username}: streak = {user.medication_streak}")
+    else:
+        # Already updated today: update only the 'taken' flag
+        user.medication_taken = taken
+        print(f"Medication already updated today for {user.username}. Streak remains {user.medication_streak}")
+
+    db.session.commit()
     return redirect(url_for('user_profile', username=session['username']))
 
 
