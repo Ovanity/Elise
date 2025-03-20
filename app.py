@@ -64,7 +64,7 @@ class User(db.Model):
 class DailyMood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.Date, default=nowparis_naive, nullable=False)  # Stocke uniquement la date (sans l'heure)
+    date = db.Column(db.Date, default=nowparis_naive)  # Stocke uniquement la date (sans l'heure)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
